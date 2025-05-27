@@ -1,7 +1,34 @@
 import React, { useState } from 'react';
-import { Power, Settings, RefreshCw } from 'lucide-react';
+import { Power, Settings, RefreshCw, Clock } from 'lucide-react';
 
 const Hardware = () => {
+  const [isAutoMode, setIsAutoMode] = useState(false);
+  const [isMotorRunning, setIsMotorRunning] = useState(false);
+  const [motorSpeed, setMotorSpeed] = useState(128); // 0-255
+  const [duration, setDuration] = useState(10); // seconds
+  const [temperature, setTemperature] = useState(25); // °C
+
+  const handleAutoModeToggle = () => {
+    setIsAutoMode(!isAutoMode);
+    if (isMotorRunning) {
+      setIsMotorRunning(false);
+    }
+  };
+
+  const startMotor = () => {
+    setIsMotorRunning(true);
+    // If in auto mode, motor will stop after duration
+    if (isAutoMode) {
+      setTimeout(() => {
+        setIsMotorRunning(false);
+      }, duration * 1000);
+    }
+  };
+
+  const stopMotor = () => {
+    setIsMotorRunning(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -15,70 +42,158 @@ const Hardware = () => {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h2 className="text-xl font-semibold mb-6">MOSFET Kontrola Motora</h2>
             <div className="space-y-6">
-              <div className="flex items-center justify-between">
+              {/* Mode Selection */}
+              <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                <div>
+                  <h3 className="font-medium text-gray-900">Režim rada</h3>
+                  <p className="text-sm text-gray-600">Izaberite način upravljanja motorom</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => handleAutoModeToggle()}
+                    className={`px-4 py-2 rounded-lg transition-colors ${
+                      !isAutoMode 
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-600'
+                    }`}
+                  >
+                    Ručno
+                  </button>
+                  <button
+                    onClick={() => handleAutoModeToggle()}
+                    className={`px-4 py-2 rounded-lg transition-colors ${
+                      isAutoMode 
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-600'
+                    }`}
+                  >
+                    Automatski
+                  </button>
+                </div>
+              </div>
+
+              {/* Auto Mode Settings */}
+              {isAutoMode && (
+                <div className="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                  <h3 className="font-medium text-gray-900 mb-4 flex items-center">
+                    <Clock className="h-4 w-4 mr-2" />
+                    Automatska kontrola
+                  </h3>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Vreme rada (sekunde)
+                    </label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="60"
+                      value={duration}
+                      onChange={(e) => setDuration(parseInt(e.target.value))}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <div className="flex justify-between mt-1">
+                      <span className="text-xs text-gray-500">1s</span>
+                      <span className="text-xs text-gray-500">{duration}s</span>
+                      <span className="text-xs text-gray-500">60s</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Brzina motora (PWM)
+                    </label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="255"
+                      value={motorSpeed}
+                      onChange={(e) => setMotorSpeed(parseInt(e.target.value))}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <div className="flex justify-between mt-1">
+                      <span className="text-xs text-gray-500">0</span>
+                      <span className="text-xs text-gray-500">{motorSpeed}</span>
+                      <span className="text-xs text-gray-500">255</span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={startMotor}
+                    disabled={isMotorRunning}
+                    className={`w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                      isMotorRunning
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-green-600 text-white hover:bg-green-700'
+                    }`}
+                  >
+                    <Power className="h-4 w-4" />
+                    <span>Pokreni ({duration}s)</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Manual Controls */}
+              {!isAutoMode && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Brzina motora (PWM)
+                    </label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="255"
+                      value={motorSpeed}
+                      onChange={(e) => setMotorSpeed(parseInt(e.target.value))}
+                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                    />
+                    <div className="flex justify-between mt-1">
+                      <span className="text-xs text-gray-500">0</span>
+                      <span className="text-xs text-gray-500">{motorSpeed}</span>
+                      <span className="text-xs text-gray-500">255</span>
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-4">
+                    <button
+                      onClick={startMotor}
+                      disabled={isMotorRunning}
+                      className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                        isMotorRunning
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'bg-green-600 text-white hover:bg-green-700'
+                      }`}
+                    >
+                      <Power className="h-4 w-4" />
+                      <span>Pokreni</span>
+                    </button>
+                    <button
+                      onClick={stopMotor}
+                      disabled={!isMotorRunning}
+                      className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                        !isMotorRunning
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'bg-red-600 text-white hover:bg-red-700'
+                      }`}
+                    >
+                      <Power className="h-4 w-4" />
+                      <span>Zaustavi</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Status Indicator */}
+              <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                 <span className="text-gray-700">Status motora:</span>
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                  Aktivan
+                <span className={`px-3 py-1 rounded-full text-sm ${
+                  isMotorRunning
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-gray-100 text-gray-800'
+                }`}>
+                  {isMotorRunning ? 'Aktivan' : 'Neaktivan'}
                 </span>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Brzina motora (PWM)
-                </label>
-                <input
-                  type="range"
-                  min="0"
-                  max="255"
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Vreme rada (sekunde)
-                </label>
-                <input
-                  type="range"
-                  min="1"
-                  max="60"
-                  defaultValue="10"
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
-                <div className="flex justify-between mt-1">
-                  <span className="text-xs text-gray-500">1s</span>
-                  <span className="text-xs text-gray-500">30s</span>
-                  <span className="text-xs text-gray-500">60s</span>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Optimalna temperatura (°C)
-                </label>
-                <input
-                  type="range"
-                  min="10"
-                  max="50"
-                  defaultValue="25"
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
-                <div className="flex justify-between mt-1">
-                  <span className="text-xs text-gray-500">10°C</span>
-                  <span className="text-xs text-gray-500">30°C</span>
-                  <span className="text-xs text-gray-500">50°C</span>
-                </div>
-              </div>
-
-              <div className="flex space-x-4">
-                <button className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                  <Power className="h-4 w-4" />
-                  <span>Pokreni</span>
-                </button>
-                <button className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                  <Power className="h-4 w-4" />
-                  <span>Zaustavi</span>
-                </button>
               </div>
             </div>
           </div>
