@@ -1,13 +1,27 @@
-import React from 'react';
-import { Thermometer, Droplets, Sun, Activity, Plus } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Thermometer, Droplets, Sun, Activity, ArrowUp } from 'lucide-react';
 import SensorCard from '../components/SensorCard';
 import IrrigationControl from '../components/IrrigationControl';
 import HardwareControl from '../components/HardwareControl';
 import AutomationRules from '../components/AutomationRules';
 import NotificationCenter from '../components/NotificationCenter';
-import SystemSettings from '../components/SystemSettings';
 
 const Dashboard = () => {
+  const [showScrollButton, setShowScrollButton] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollButton(window.scrollY > 400);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -73,18 +87,38 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* System Settings */}
+        {/* Sensors and Devices Section */}
         <div className="mt-8">
-          <SystemSettings />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="text-center p-3 bg-green-50 rounded-lg">
+              <div className="text-sm font-medium text-gray-900">Temperatura</div>
+              <div className="text-xs text-green-600">Online</div>
+            </div>
+            <div className="text-center p-3 bg-green-50 rounded-lg">
+              <div className="text-sm font-medium text-gray-900">Vlažnost</div>
+              <div className="text-xs text-green-600">Online</div>
+            </div>
+            <div className="text-center p-3 bg-green-50 rounded-lg">
+              <div className="text-sm font-medium text-gray-900">Svetlost</div>
+              <div className="text-xs text-green-600">Online</div>
+            </div>
+            <div className="text-center p-3 bg-red-50 rounded-lg">
+              <div className="text-sm font-medium text-gray-900">pH senzor</div>
+              <div className="text-xs text-red-600">Offline</div>
+            </div>
+          </div>
         </div>
 
-        {/* New Rule Button */}
-        <div className="fixed bottom-8 right-8">
-          <button className="flex items-center space-x-2 px-6 py-3 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transition-colors">
-            <Plus className="h-5 w-5" />
-            <span>Novo pravilo</span>
+        {/* Back to Top Button */}
+        {showScrollButton && (
+          <button
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 flex items-center space-x-2 px-6 py-3 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transition-colors"
+          >
+            <ArrowUp className="h-5 w-5" />
+            <span>Na vrh</span>
           </button>
-        </div>
+        )}
       </div>
     </div>
   );
