@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Power, Settings, RefreshCw, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Power, Settings, RefreshCw, Clock, Thermometer } from 'lucide-react';
 
 const Hardware = () => {
   const [isAutoMode, setIsAutoMode] = useState(false);
@@ -7,6 +7,31 @@ const Hardware = () => {
   const [motorSpeed, setMotorSpeed] = useState(128); // 0-255
   const [duration, setDuration] = useState(10); // seconds
   const [temperature, setTemperature] = useState(25); // °C
+  const [currentTemperature, setCurrentTemperature] = useState(24); // Simulirana trenutna temperatura
+  const [optimalTemperature, setOptimalTemperature] = useState(25); // Optimalna temperatura
+
+  // Simulacija promene temperature
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTemperature(prev => {
+        const change = Math.random() * 0.4 - 0.2;
+        return Number((prev + change).toFixed(1));
+      });
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Automatska kontrola motora na osnovu temperature
+  useEffect(() => {
+    if (isAutoMode) {
+      if (currentTemperature > optimalTemperature + 2 && !isMotorRunning) {
+        setIsMotorRunning(true);
+      } else if (currentTemperature <= optimalTemperature && isMotorRunning) {
+        setIsMotorRunning(false);
+      }
+    }
+  }, [currentTemperature, optimalTemperature, isAutoMode]);
 
   const handleAutoModeToggle = () => {
     setIsAutoMode(!isAutoMode);
@@ -16,17 +41,15 @@ const Hardware = () => {
   };
 
   const startMotor = () => {
-    setIsMotorRunning(true);
-    // If in auto mode, motor will stop after duration
-    if (isAutoMode) {
-      setTimeout(() => {
-        setIsMotorRunning(false);
-      }, duration * 1000);
+    if (!isAutoMode) {
+      setIsMotorRunning(true);
     }
   };
 
   const stopMotor = () => {
-    setIsMotorRunning(false);
+    if (!isAutoMode) {
+      setIsMotorRunning(false);
+    }
   };
 
   return (
@@ -72,6 +95,38 @@ const Hardware = () => {
                 </div>
               </div>
 
+              {/* Temperature Control */}
+              <div className="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <Thermometer className="h-5 w-5 text-red-500" />
+                    <span className="font-medium text-gray-900">Trenutna temperatura: {currentTemperature}°C</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Optimalna temperatura (°C)
+                  </label>
+                  <input
+                    type="range"
+                    min="15"
+                    max="35"
+                    value={optimalTemperature}
+                    onChange={(e) => setOptimalTemperature(parseInt(e.target.value))}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  />
+                  <div className="flex justify-between mt-1">
+                    <span className="text-xs text-gray-500">15°C</span>
+                    <span className="text-xs text-gray-500">{optimalTemperature}°C</span>
+                    <span className="text-xs text-gray-500">35°C</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">
+                    Motor će se automatski pokrenuti kada temperatura pređe {optimalTemperature + 2}°C
+                  </p>
+                </div>
+              </div>
+
               {/* Auto Mode Settings */}
               {isAutoMode && (
                 <div className="space-y-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
@@ -80,25 +135,6 @@ const Hardware = () => {
                     Automatska kontrola
                   </h3>
                   
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Vreme rada (sekunde)
-                    </label>
-                    <input
-                      type="range"
-                      min="1"
-                      max="60"
-                      value={duration}
-                      onChange={(e) => setDuration(parseInt(e.target.value))}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
-                    <div className="flex justify-between mt-1">
-                      <span className="text-xs text-gray-500">1s</span>
-                      <span className="text-xs text-gray-500">{duration}s</span>
-                      <span className="text-xs text-gray-500">60s</span>
-                    </div>
-                  </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Brzina motora (PWM)
@@ -117,19 +153,6 @@ const Hardware = () => {
                       <span className="text-xs text-gray-500">255</span>
                     </div>
                   </div>
-
-                  <button
-                    onClick={startMotor}
-                    disabled={isMotorRunning}
-                    className={`w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                      isMotorRunning
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-green-600 text-white hover:bg-green-700'
-                    }`}
-                  >
-                    <Power className="h-4 w-4" />
-                    <span>Pokreni ({duration}s)</span>
-                  </button>
                 </div>
               )}
 
