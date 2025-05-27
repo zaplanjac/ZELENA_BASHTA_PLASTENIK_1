@@ -6,11 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Dashboard from "./pages/Dashboard";
 import Plants from "./pages/Plants";
-import Calendar from "./pages/Calendar";
-import GreenHousePlanner from "./pages/GreenHousePlanner";
-import Analytics from "./pages/Analytics";
-import Settings from "./pages/Settings";
 import Hardware from "./pages/Hardware";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,9 +23,6 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/plants" element={<Plants />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/planner" element={<GreenHousePlanner />} />
-            <Route path="/analytics" element={<Analytics />} />
             <Route path="/hardware" element={<Hardware />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />
