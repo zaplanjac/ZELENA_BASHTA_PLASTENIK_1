@@ -6,7 +6,7 @@ const Navigation = () => {
   const location = useLocation();
   
   const navItems = [
-    { path: '/', icon: Home, label: 'Dashboard' },
+    { path: '/', icon: Home, label: 'Kontrolna tabla' },
     { path: '/plants', icon: Sprout, label: 'Biljke' },
     { path: '/calendar', icon: Calendar, label: 'Kalendar bilja' },
     { path: '/planner', icon: Layout, label: 'Planer' },

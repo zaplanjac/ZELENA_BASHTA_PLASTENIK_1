@@ -1,7 +1,6 @@
 import React from 'react';
 import { Save } from 'lucide-react';
 import WiFiManager from '@/components/WiFiManager';
-import SystemSettings from '@/components/SystemSettings';
 
 const Settings = () => {
   return (
@@ -10,15 +9,12 @@ const Settings = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">WI-FI</h1>
-          <p className="text-gray-600">Upravljanje WI-FI konekcijom i hardverom</p>
+          <p className="text-gray-600">Upravljanje WI-FI konekcijom</p>
         </div>
 
         <div className="space-y-6">
           {/* WiFi Management */}
           <WiFiManager />
-
-          {/* System Settings */}
-          <SystemSettings />
 
           {/* Save Button */}
           <div className="flex justify-end">

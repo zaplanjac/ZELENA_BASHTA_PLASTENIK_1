@@ -5,6 +5,7 @@ import IrrigationControl from '../components/IrrigationControl';
 import HardwareControl from '../components/HardwareControl';
 import AutomationRules from '../components/AutomationRules';
 import NotificationCenter from '../components/NotificationCenter';
+import SystemSettings from '../components/SystemSettings';
 
 const Dashboard = () => {
   return (
@@ -12,7 +13,7 @@ const Dashboard = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Kontrolna tabla</h1>
           <p className="text-gray-600">Pregled stanja vaše pametne bašte</p>
         </div>
 
@@ -70,6 +71,11 @@ const Dashboard = () => {
             <HardwareControl />
             <NotificationCenter />
           </div>
+        </div>
+
+        {/* System Settings */}
+        <div className="mt-8">
+          <SystemSettings />
         </div>
 
         {/* New Rule Button */}
