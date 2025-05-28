@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ScheduleList from './ScheduleList';
@@ -16,46 +16,51 @@ interface IrrigationScheduleManagerProps {
   onClose: () => void;
 }
 
+const STORAGE_KEY = 'irrigation_schedules';
+
 const IrrigationScheduleManager = ({ onClose }: IrrigationScheduleManagerProps) => {
-  const [schedules, setSchedules] = useState<ScheduleItem[]>([
-    { 
-      id: '1', 
-      time: '06:00', 
-      zones: ['Vrt - Povrće', 'Cvećnjak'], 
-      duration: 15, 
-      active: true, 
-      days: ['Mon', 'Wed', 'Fri'] 
-    },
-    { 
-      id: '2', 
-      time: '12:00', 
-      zones: ['Plastenik'], 
-      duration: 5, 
-      active: true, 
-      days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'] 
-    },
-    { 
-      id: '3', 
-      time: '18:00', 
-      zones: ['Travnjak'], 
-      duration: 20, 
-      active: false, 
-      days: ['Sat', 'Sun'] 
-    },
-    { 
-      id: '4', 
-      time: '20:00', 
-      zones: ['Vrt - Povrće'], 
-      duration: 10, 
-      active: true, 
-      days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] 
-    }
-  ]);
+  const [schedules, setSchedules] = useState<ScheduleItem[]>(() => {
+    const savedSchedules = localStorage.getItem(STORAGE_KEY);
+    return savedSchedules ? JSON.parse(savedSchedules) : [
+      { 
+        id: '1', 
+        time: '06:00', 
+        zones: ['Vrt - Povrće'], 
+        duration: 15, 
+        active: true, 
+        days: ['Mon', 'Wed', 'Fri'] 
+      },
+      { 
+        id: '2', 
+        time: '12:00', 
+        zones: ['Plastenik'], 
+        duration: 5, 
+        active: true, 
+        days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'] 
+      },
+      { 
+        id: '3', 
+        time: '18:00', 
+        zones: ['Travnjak'], 
+        duration: 20, 
+        active: false, 
+        days: ['Sat', 'Sun'] 
+      },
+      { 
+        id: '4', 
+        time: '20:00', 
+        zones: ['Vrt - Povrće'], 
+        duration: 10, 
+        active: true, 
+        days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] 
+      }
+    ];
+  });
 
   const [editingSchedule, setEditingSchedule] = useState<ScheduleItem | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
-  const availableZones = ['Vrt - Povrće', 'Cvećnjak', 'Plastenik', 'Travnjak'];
+  const availableZones = ['Vrt - Povrće', 'Plastenik', 'Travnjak'];
   const daysOfWeek = [
     { key: 'Mon', label: 'Pon' },
     { key: 'Tue', label: 'Uto' },
@@ -66,8 +71,11 @@ const IrrigationScheduleManager = ({ onClose }: IrrigationScheduleManagerProps) 
     { key: 'Sun', label: 'Ned' }
   ];
 
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(schedules));
+  }, [schedules]);
+
   const createNewSchedule = () => {
-    console.log('Creating new schedule...');
     const newSchedule: ScheduleItem = {
       id: Date.now().toString(),
       time: '08:00',
@@ -78,11 +86,9 @@ const IrrigationScheduleManager = ({ onClose }: IrrigationScheduleManagerProps) 
     };
     setEditingSchedule(newSchedule);
     setIsCreating(true);
-    console.log('New schedule created:', newSchedule);
   };
 
   const saveSchedule = (schedule: ScheduleItem) => {
-    console.log('Saving schedule:', schedule);
     if (isCreating) {
       setSchedules([...schedules, schedule]);
       setIsCreating(false);
@@ -103,7 +109,6 @@ const IrrigationScheduleManager = ({ onClose }: IrrigationScheduleManagerProps) 
   };
 
   const cancelEdit = () => {
-    console.log('Canceling edit...');
     setEditingSchedule(null);
     setIsCreating(false);
   };
