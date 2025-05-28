@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Search, Filter, Grid, List, Calendar, Layout, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GreenHousePlanner from '../components/GreenHousePlanner';
+import { PlantIcon } from '@/components/PlantIcon';
 
 const Plants = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -335,11 +336,7 @@ const Plants = () => {
                 {filteredPlants.map((plant, index) => (
                   <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                     <div className="flex items-center justify-center mb-4">
-                      <img 
-                        src={`/icons/${plant.icon}.svg`}
-                        alt={plant.name}
-                        className="w-16 h-16"
-                      />
+                      <PlantIcon name={plant.icon} className="w-16 h-16 text-green-600" />
                     </div>
                     <h3 className="text-lg font-semibold text-center text-gray-900 mb-2">{plant.name}</h3>
                     <p className="text-sm text-center text-gray-600 italic">{plant.variety}</p>
@@ -351,11 +348,7 @@ const Plants = () => {
                 {filteredPlants.map((plant, index) => (
                   <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center space-x-6">
-                      <img 
-                        src={`/icons/${plant.icon}.svg`}
-                        alt={plant.name}
-                        className="w-12 h-12"
-                      />
+                      <PlantIcon name={plant.icon} className="w-12 h-12 text-green-600" />
                       <div>
                         <h3 className="font-semibold text-gray-900">{plant.name}</h3>
                         <p className="text-sm text-gray-600 italic">{plant.variety}</p>
