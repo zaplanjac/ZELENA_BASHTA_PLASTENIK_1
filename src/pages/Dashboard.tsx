@@ -1,27 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Thermometer, Droplets, Sun, Activity, ArrowUp } from 'lucide-react';
+import React from 'react';
+import { Thermometer, Droplets, Sun, Activity } from 'lucide-react';
 import SensorCard from '../components/SensorCard';
 import IrrigationControl from '../components/IrrigationControl';
 import HardwareControl from '../components/HardwareControl';
 import AutomationRules from '../components/AutomationRules';
 import NotificationCenter from '../components/NotificationCenter';
+import BackToTop from '../components/BackToTop';
 
 const Dashboard = () => {
-  const [showScrollButton, setShowScrollButton] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollButton(window.scrollY > 400);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -108,18 +94,8 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-
-        {/* Back to Top Button */}
-        {showScrollButton && (
-          <button
-            onClick={scrollToTop}
-            className="fixed bottom-8 right-8 flex items-center space-x-2 px-6 py-3 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transition-colors"
-          >
-            <ArrowUp className="h-5 w-5" />
-            <span>Na vrh</span>
-          </button>
-        )}
       </div>
+      <BackToTop />
     </div>
   );
 };
