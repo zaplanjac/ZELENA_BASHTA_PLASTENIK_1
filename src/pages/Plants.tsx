@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PlantCard from '../components/PlantCard';
 import { Plus, Search, Filter, Grid, List, Calendar, Layout, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GreenHousePlanner from '../components/GreenHousePlanner';
@@ -12,6 +11,139 @@ const Plants = () => {
   const monthNames = [
     'Januar', 'Februar', 'Mart', 'April', 'Maj', 'Jun',
     'Jul', 'Avgust', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'
+  ];
+
+  const plants = [
+    {
+      name: 'Paradajz',
+      variety: 'Solanum lycopersicum',
+      icon: 'tomato'
+    },
+    {
+      name: 'Paprika',
+      variety: 'Capsicum annuum',
+      icon: 'pepper'
+    },
+    {
+      name: 'Krastavac',
+      variety: 'Cucumis sativus',
+      icon: 'cucumber'
+    },
+    {
+      name: 'Kupus',
+      variety: 'Brassica oleracea var. capitata',
+      icon: 'cabbage'
+    },
+    {
+      name: 'Keleraba',
+      variety: 'Brassica oleracea var. gongylodes',
+      icon: 'kohlrabi'
+    },
+    {
+      name: 'Salata',
+      variety: 'Lactuca sativa',
+      icon: 'lettuce'
+    },
+    {
+      name: 'Spanać',
+      variety: 'Spinacia oleracea',
+      icon: 'spinach'
+    },
+    {
+      name: 'Rotkvica',
+      variety: 'Raphanus sativus',
+      icon: 'radish'
+    },
+    {
+      name: 'Grašak',
+      variety: 'Pisum sativum',
+      icon: 'peas'
+    },
+    {
+      name: 'Mrkva',
+      variety: 'Daucus carota',
+      icon: 'carrot'
+    },
+    {
+      name: 'Peršun',
+      variety: 'Petroselinum crispum',
+      icon: 'parsley'
+    },
+    {
+      name: 'Paštrnak',
+      variety: 'Pastinaca sativa',
+      icon: 'parsnip'
+    },
+    {
+      name: 'Crni luk',
+      variety: 'Allium cepa',
+      icon: 'onion'
+    },
+    {
+      name: 'Beli luk',
+      variety: 'Allium sativum',
+      icon: 'garlic'
+    },
+    {
+      name: 'Krompir',
+      variety: 'Solanum tuberosum',
+      icon: 'potato'
+    },
+    {
+      name: 'Kelj',
+      variety: 'Brassica oleracea var. sabauda',
+      icon: 'kale'
+    },
+    {
+      name: 'Karfiol',
+      variety: 'Brassica oleracea var. botrytis',
+      icon: 'cauliflower'
+    },
+    {
+      name: 'Ren',
+      variety: 'Armoracia rusticana',
+      icon: 'horseradish'
+    },
+    {
+      name: 'Plavi Patlidžan',
+      variety: 'Solanum melongena',
+      icon: 'eggplant'
+    },
+    {
+      name: 'Tikvica',
+      variety: 'Cucurbita pepo',
+      icon: 'zucchini'
+    },
+    {
+      name: 'Pasulj',
+      variety: 'Phaseolus vulgaris',
+      icon: 'beans'
+    },
+    {
+      name: 'Boranija',
+      variety: 'Phaseolus vulgaris var. vulgaris',
+      icon: 'green-beans'
+    },
+    {
+      name: 'Celer',
+      variety: 'Apium graveolens',
+      icon: 'celery'
+    },
+    {
+      name: 'Praziluk',
+      variety: 'Allium porrum',
+      icon: 'leek'
+    },
+    {
+      name: 'Lubenica',
+      variety: 'Citrullus lanatus',
+      icon: 'watermelon'
+    },
+    {
+      name: 'Dinja',
+      variety: 'Cucumis melo',
+      icon: 'melon'
+    }
   ];
 
   const calendarData = {
@@ -107,69 +239,6 @@ const Plants = () => {
     ]
   };
 
-  const plants = [
-    {
-      name: 'Paradajz Cherry',
-      variety: 'Solanum lycopersicum',
-      image: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=400',
-      waterLevel: 85,
-      lightLevel: 92,
-      health: 'excellent' as const,
-      lastWatered: 'Pre 2 sata',
-      nextWatering: 'Za 6 sati'
-    },
-    {
-      name: 'Bosiljak',
-      variety: 'Ocimum basilicum',
-      image: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=400',
-      waterLevel: 45,
-      lightLevel: 78,
-      health: 'warning' as const,
-      lastWatered: 'Pre 8 sati',
-      nextWatering: 'Sada'
-    },
-    {
-      name: 'Krastavac',
-      variety: 'Cucumis sativus',
-      image: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=400',
-      waterLevel: 72,
-      lightLevel: 85,
-      health: 'good' as const,
-      lastWatered: 'Pre 4 sata',
-      nextWatering: 'Za 4 sata'
-    },
-    {
-      name: 'Paprika',
-      variety: 'Capsicum annuum',
-      image: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400',
-      waterLevel: 90,
-      lightLevel: 88,
-      health: 'excellent' as const,
-      lastWatered: 'Pre 1 sat',
-      nextWatering: 'Za 7 sati'
-    },
-    {
-      name: 'Salata',
-      variety: 'Lactuca sativa',
-      image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=400',
-      waterLevel: 65,
-      lightLevel: 70,
-      health: 'good' as const,
-      lastWatered: 'Pre 3 sata',
-      nextWatering: 'Za 5 sati'
-    },
-    {
-      name: 'Ruzmarin',
-      variety: 'Rosmarinus officinalis',
-      image: 'https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?w=400',
-      waterLevel: 30,
-      lightLevel: 95,
-      health: 'critical' as const,
-      lastWatered: 'Pre 12 sati',
-      nextWatering: 'Hitno!'
-    }
-  ];
-
   const filteredPlants = plants.filter(plant =>
     plant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     plant.variety.toLowerCase().includes(searchTerm.toLowerCase())
@@ -190,7 +259,7 @@ const Plants = () => {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Biljke</h1>
-            <p className="text-gray-600">Upravljajte vašim biljkama i pratite njihovo zdravlje</p>
+            <p className="text-gray-600">Pregled biljaka u bašti</p>
           </div>
           <button className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
             <Plus className="h-4 w-4" />
@@ -264,7 +333,17 @@ const Plants = () => {
             {viewMode === 'grid' ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filteredPlants.map((plant, index) => (
-                  <PlantCard key={index} {...plant} />
+                  <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                    <div className="flex items-center justify-center mb-4">
+                      <img 
+                        src={`/icons/${plant.icon}.svg`}
+                        alt={plant.name}
+                        className="w-16 h-16"
+                      />
+                    </div>
+                    <h3 className="text-lg font-semibold text-center text-gray-900 mb-2">{plant.name}</h3>
+                    <p className="text-sm text-center text-gray-600 italic">{plant.variety}</p>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -273,31 +352,13 @@ const Plants = () => {
                   <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center space-x-6">
                       <img 
-                        src={plant.image} 
+                        src={`/icons/${plant.icon}.svg`}
                         alt={plant.name}
-                        className="w-20 h-20 rounded-lg object-cover"
+                        className="w-12 h-12"
                       />
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 mb-1">{plant.name}</h3>
-                        <p className="text-sm text-gray-600 mb-2">{plant.variety}</p>
-                        <div className="flex items-center space-x-4 text-sm">
-                          <span>Vlažnost: {plant.waterLevel}%</span>
-                          <span>Svetlo: {plant.lightLevel}%</span>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            plant.health === 'excellent' ? 'bg-green-100 text-green-800' :
-                            plant.health === 'good' ? 'bg-blue-100 text-blue-800' :
-                            plant.health === 'warning' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {plant.health === 'excellent' ? 'Odlično' :
-                             plant.health === 'good' ? 'Dobro' :
-                             plant.health === 'warning' ? 'Pažnja' : 'Kritično'}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="text-right text-sm text-gray-600">
-                        <div>Sledeće zalivanje</div>
-                        <div className="font-medium">{plant.nextWatering}</div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">{plant.name}</h3>
+                        <p className="text-sm text-gray-600 italic">{plant.variety}</p>
                       </div>
                     </div>
                   </div>
