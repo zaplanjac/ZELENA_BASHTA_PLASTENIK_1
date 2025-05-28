@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Droplets, Play, Pause, Clock, Settings, Thermometer } from 'lucide-react';
+import { Droplets, Clock, Settings, Thermometer } from 'lucide-react';
 import IrrigationScheduleManager from './IrrigationScheduleManager';
 
 interface Zone {
@@ -23,14 +23,6 @@ const IrrigationControl = () => {
   const [optimalTemperature, setOptimalTemperature] = useState(25);
   const [fanSpeed, setFanSpeed] = useState(0);
   const [isAutoTemp, setIsAutoTemp] = useState(true);
-
-  const toggleZone = (id: number) => {
-    setZones(zones.map(zone => 
-      zone.id === id 
-        ? { ...zone, status: zone.status === 'active' ? 'inactive' : 'active' }
-        : zone
-    ));
-  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -140,27 +132,6 @@ const IrrigationControl = () => {
                   </span>
                 </div>
               </div>
-              
-              <button
-                onClick={() => toggleZone(zone.id)}
-                className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${
-                  zone.status === 'active'
-                    ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                    : 'bg-green-100 text-green-700 hover:bg-green-200'
-                }`}
-              >
-                {zone.status === 'active' ? (
-                  <>
-                    <Pause className="h-4 w-4" />
-                    <span>Zaustavi</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="h-4 w-4" />
-                    <span>Pokreni</span>
-                  </>
-                )}
-              </button>
             </div>
             
             <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
