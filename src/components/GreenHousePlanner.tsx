@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Plus, Move, RotateCcw, Save, Download, Upload, Grid, Maximize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 interface PlantItem {
   id: string;
   name: string;
-  type: 'vegetable' | 'herb' | 'flower';
+  type: 'vegetable' | 'herb' | 'root';
   size: 'small' | 'medium' | 'large';
   color: string;
   x: number;
@@ -24,13 +23,36 @@ const GreenHousePlanner = () => {
   const [showGrid, setShowGrid] = useState(true);
 
   const plantTemplates = [
+    // Povrće
     { name: 'Paradajz', type: 'vegetable' as const, size: 'large' as const, color: '#ef4444', width: 80, height: 80 },
     { name: 'Paprika', type: 'vegetable' as const, size: 'medium' as const, color: '#f97316', width: 60, height: 60 },
     { name: 'Krastavac', type: 'vegetable' as const, size: 'large' as const, color: '#22c55e', width: 100, height: 60 },
     { name: 'Salata', type: 'vegetable' as const, size: 'small' as const, color: '#84cc16', width: 40, height: 40 },
-    { name: 'Bosiljak', type: 'herb' as const, size: 'small' as const, color: '#10b981', width: 30, height: 30 },
-    { name: 'Ruzmarin', type: 'herb' as const, size: 'medium' as const, color: '#059669', width: 50, height: 50 },
-    { name: 'Cveće', type: 'flower' as const, size: 'small' as const, color: '#a855f7', width: 35, height: 35 }
+    { name: 'Kupus', type: 'vegetable' as const, size: 'large' as const, color: '#16a34a', width: 90, height: 90 },
+    { name: 'Karfiol', type: 'vegetable' as const, size: 'large' as const, color: '#14b8a6', width: 85, height: 85 },
+    { name: 'Kelj', type: 'vegetable' as const, size: 'large' as const, color: '#0ea5e9', width: 80, height: 80 },
+    { name: 'Keleraba', type: 'vegetable' as const, size: 'medium' as const, color: '#6366f1', width: 50, height: 50 },
+    { name: 'Plavi Patlidžan', type: 'vegetable' as const, size: 'medium' as const, color: '#8b5cf6', width: 60, height: 60 },
+    { name: 'Tikvica', type: 'vegetable' as const, size: 'large' as const, color: '#ec4899', width: 90, height: 90 },
+    { name: 'Pasulj', type: 'vegetable' as const, size: 'small' as const, color: '#f43f5e', width: 30, height: 30 },
+    { name: 'Boranija', type: 'vegetable' as const, size: 'small' as const, color: '#0891b2', width: 30, height: 30 },
+    { name: 'Grašak', type: 'vegetable' as const, size: 'small' as const, color: '#059669', width: 30, height: 30 },
+    { name: 'Spanać', type: 'vegetable' as const, size: 'small' as const, color: '#65a30d', width: 35, height: 35 },
+    { name: 'Rotkvica', type: 'vegetable' as const, size: 'small' as const, color: '#dc2626', width: 25, height: 25 },
+    { name: 'Cvekla', type: 'root' as const, size: 'medium' as const, color: '#7f1d1d', width: 45, height: 45 },
+    
+    // Korenasto povrće
+    { name: 'Mrkva', type: 'root' as const, size: 'small' as const, color: '#ea580c', width: 30, height: 30 },
+    { name: 'Peršun', type: 'root' as const, size: 'small' as const, color: '#65a30d', width: 25, height: 25 },
+    { name: 'Paštrnak', type: 'root' as const, size: 'small' as const, color: '#b45309', width: 30, height: 30 },
+    { name: 'Celer', type: 'root' as const, size: 'medium' as const, color: '#15803d', width: 40, height: 40 },
+    { name: 'Ren', type: 'root' as const, size: 'medium' as const, color: '#1e40af', width: 40, height: 40 },
+    { name: 'Praziluk', type: 'vegetable' as const, size: 'medium' as const, color: '#0f766e', width: 35, height: 35 },
+    
+    // Lukovi
+    { name: 'Crni Luk', type: 'vegetable' as const, size: 'small' as const, color: '#b91c1c', width: 30, height: 30 },
+    { name: 'Beli Luk', type: 'vegetable' as const, size: 'small' as const, color: '#f9fafb', width: 25, height: 25 },
+    { name: 'Luk Srebrnjak', type: 'vegetable' as const, size: 'small' as const, color: '#94a3b8', width: 25, height: 25 }
   ];
 
   const addPlant = (template: typeof plantTemplates[0]) => {
@@ -145,49 +167,88 @@ const GreenHousePlanner = () => {
                   <span>Biljke</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {plantTemplates.map((template, index) => (
-                  <button
-                    key={index}
-                    onClick={() => addPlant(template)}
-                    className="w-full p-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div 
-                        className="w-6 h-6 rounded"
-                        style={{ backgroundColor: template.color }}
-                      ></div>
-                      <div>
-                        <div className="font-medium text-sm">{template.name}</div>
-                        <div className="text-xs text-gray-500 capitalize">
-                          {template.type} • {template.size}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-
-                {/* Plant Info */}
-                {selectedPlant && (
-                  <div className="mt-6 p-3 bg-green-50 rounded-lg">
-                    <h4 className="font-medium text-green-900 mb-2">Selektovana biljka</h4>
-                    {(() => {
-                      const plant = plants.find(p => p.id === selectedPlant);
-                      return plant ? (
-                        <div className="text-sm text-green-800">
-                          <div>{plant.name}</div>
-                          <div>Pozicija: {Math.round(plant.x)}, {Math.round(plant.y)}</div>
+              <CardContent>
+                <div className="space-y-6">
+                  {/* Vegetables Section */}
+                  <div>
+                    <h3 className="font-medium text-sm text-gray-500 mb-3">Povrće</h3>
+                    <div className="space-y-2">
+                      {plantTemplates
+                        .filter(t => t.type === 'vegetable')
+                        .map((template, index) => (
                           <button
-                            onClick={() => removePlant(plant.id)}
-                            className="mt-2 text-red-600 hover:text-red-800 text-xs"
+                            key={index}
+                            onClick={() => addPlant(template)}
+                            className="w-full p-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                           >
-                            Ukloni biljku
+                            <div className="flex items-center space-x-3">
+                              <div 
+                                className="w-6 h-6 rounded"
+                                style={{ backgroundColor: template.color }}
+                              ></div>
+                              <div>
+                                <div className="font-medium text-sm">{template.name}</div>
+                                <div className="text-xs text-gray-500 capitalize">
+                                  {template.size}
+                                </div>
+                              </div>
+                            </div>
                           </button>
-                        </div>
-                      ) : null;
-                    })()}
+                        ))}
+                    </div>
                   </div>
-                )}
+
+                  {/* Root Vegetables Section */}
+                  <div>
+                    <h3 className="font-medium text-sm text-gray-500 mb-3">Korenasto povrće</h3>
+                    <div className="space-y-2">
+                      {plantTemplates
+                        .filter(t => t.type === 'root')
+                        .map((template, index) => (
+                          <button
+                            key={index}
+                            onClick={() => addPlant(template)}
+                            className="w-full p-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div 
+                                className="w-6 h-6 rounded"
+                                style={{ backgroundColor: template.color }}
+                              ></div>
+                              <div>
+                                <div className="font-medium text-sm">{template.name}</div>
+                                <div className="text-xs text-gray-500 capitalize">
+                                  {template.size}
+                                </div>
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+
+                  {/* Plant Info */}
+                  {selectedPlant && (
+                    <div className="mt-6 p-3 bg-green-50 rounded-lg">
+                      <h4 className="font-medium text-green-900 mb-2">Selektovana biljka</h4>
+                      {(() => {
+                        const plant = plants.find(p => p.id === selectedPlant);
+                        return plant ? (
+                          <div className="text-sm text-green-800">
+                            <div>{plant.name}</div>
+                            <div>Pozicija: {Math.round(plant.x)}, {Math.round(plant.y)}</div>
+                            <button
+                              onClick={() => removePlant(plant.id)}
+                              className="mt-2 text-red-600 hover:text-red-800 text-xs"
+                            >
+                              Ukloni biljku
+                            </button>
+                          </div>
+                        ) : null;
+                      })()}
+                    </div>
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>
