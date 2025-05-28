@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Thermometer, 
@@ -9,7 +8,7 @@ import {
   WifiOff,
   Power,
   Settings,
-  RotateCcw
+  RotateCw
 } from 'lucide-react';
 
 interface HardwareDevice {
@@ -94,10 +93,10 @@ const HardwareControl = () => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Hardverska kontrola</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Ručna hardverska kontrola</h3>
         <div className="flex space-x-2">
           <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-            <RotateCcw className="h-4 w-4" />
+            <RotateCw className="h-4 w-4" />
           </button>
           <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
             <Settings className="h-4 w-4" />
