@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Droplets, Play, Pause, Clock, Settings } from 'lucide-react';
+import IrrigationScheduleManager from './IrrigationScheduleManager';
 
 interface Zone {
   id: number;
@@ -16,6 +17,8 @@ const IrrigationControl = () => {
     { id: 3, name: 'Travnjak', status: 'scheduled', lastRun: '07:30', nextRun: '19:30', duration: 20 },
     { id: 4, name: 'Plastenik', status: 'inactive', lastRun: '12:00', nextRun: '18:00', duration: 5 }
   ]);
+
+  const [showScheduleManager, setShowScheduleManager] = useState(false);
 
   const toggleZone = (id: number) => {
     setZones(zones.map(zone => 
@@ -45,7 +48,10 @@ const IrrigationControl = () => {
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-gray-900">Kontrola navodnjavanja</h3>
-        <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <button 
+          onClick={() => setShowScheduleManager(true)} 
+          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
           <Settings className="h-4 w-4" />
           <span>Podešavanja</span>
         </button>
@@ -116,6 +122,11 @@ const IrrigationControl = () => {
           </div>
         </div>
       </div>
+
+      {/* Schedule Manager Modal */}
+      {showScheduleManager && (
+        <IrrigationScheduleManager onClose={() => setShowScheduleManager(false)} />
+      )}
     </div>
   );
 };
