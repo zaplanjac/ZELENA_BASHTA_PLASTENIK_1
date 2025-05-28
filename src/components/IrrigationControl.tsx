@@ -14,8 +14,9 @@ interface Zone {
 const IrrigationControl = () => {
   const [zones, setZones] = useState<Zone[]>([
     { id: 1, name: 'Vrt - Povrće', status: 'active', lastRun: '08:00', nextRun: '20:00', duration: 15 },
-    { id: 3, name: 'Travnjak', status: 'scheduled', lastRun: '07:30', nextRun: '19:30', duration: 20 },
-    { id: 4, name: 'Plastenik', status: 'inactive', lastRun: '12:00', nextRun: '18:00', duration: 5 }
+    { id: 2, name: 'Cvećnjak', status: 'inactive', lastRun: '07:30', nextRun: '19:30', duration: 20 },
+    { id: 3, name: 'Plastenik', status: 'scheduled', lastRun: '12:00', nextRun: '18:00', duration: 5 },
+    { id: 4, name: 'Travnjak', status: 'inactive', lastRun: '07:30', nextRun: '19:30', duration: 20 }
   ]);
 
   const [showScheduleManager, setShowScheduleManager] = useState(false);

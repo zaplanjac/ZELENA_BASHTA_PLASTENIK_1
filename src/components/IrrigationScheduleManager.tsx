@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -30,7 +29,7 @@ const IrrigationScheduleManager = ({ onClose }: IrrigationScheduleManagerProps) 
     { 
       id: '2', 
       time: '12:00', 
-      zones: ['Staklenica'], 
+      zones: ['Plastenik'], 
       duration: 5, 
       active: true, 
       days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'] 
@@ -56,7 +55,7 @@ const IrrigationScheduleManager = ({ onClose }: IrrigationScheduleManagerProps) 
   const [editingSchedule, setEditingSchedule] = useState<ScheduleItem | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
-  const availableZones = ['Vrt - Povrće', 'Cvećnjak', 'Travnjak', 'Staklenica'];
+  const availableZones = ['Vrt - Povrće', 'Cvećnjak', 'Plastenik', 'Travnjak'];
   const daysOfWeek = [
     { key: 'Mon', label: 'Pon' },
     { key: 'Tue', label: 'Uto' },
