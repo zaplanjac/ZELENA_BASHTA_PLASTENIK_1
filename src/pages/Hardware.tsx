@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Power, Settings, RefreshCw, Clock, Thermometer } from 'lucide-react';
+import BackToTop from '../components/BackToTop';
 
 const Hardware = () => {
   const [isAutoMode, setIsAutoMode] = useState(false);
@@ -338,6 +339,7 @@ void handleStatus() {
           </pre>
         </div>
       </div>
+      <BackToTop />
     </div>
   );
 };
