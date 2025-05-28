@@ -209,10 +209,7 @@ const Plants = () => {
           </TabsContent>
 
           <TabsContent value="calendar">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-              {/* Import and use the Calendar component content here */}
-              <iframe src="/calendar" className="w-full h-[800px] border-none" />
-            </div>
+            <iframe src="/calendar" className="w-full h-[800px] border-none rounded-lg" />
           </TabsContent>
 
           <TabsContent value="planner">
