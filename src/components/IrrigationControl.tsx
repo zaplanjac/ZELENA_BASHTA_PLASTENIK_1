@@ -1,44 +1,21 @@
 import React, { useState } from 'react';
 import { Droplets, Clock, Settings, Thermometer } from 'lucide-react';
 import IrrigationScheduleManager from './IrrigationScheduleManager';
-
-interface Zone {
-  id: number;
-  name: string;
-  status: 'active' | 'inactive' | 'scheduled';
-  lastRun: string;
-  nextRun: string;
-  duration: number;
-}
+import { useIrrigationStore } from '@/lib/settings';
 
 const IrrigationControl = () => {
-  const [zones, setZones] = useState<Zone[]>([
-    { id: 1, name: 'Vrt - Povrće', status: 'active', lastRun: '08:00', nextRun: '20:00', duration: 15 },
-    { id: 2, name: 'Plastenik', status: 'scheduled', lastRun: '12:00', nextRun: '18:00', duration: 5 },
-    { id: 3, name: 'Travnjak', status: 'inactive', lastRun: '07:30', nextRun: '19:30', duration: 20 }
-  ]);
-
   const [showScheduleManager, setShowScheduleManager] = useState(false);
-  const [temperature, setTemperature] = useState(24);
-  const [optimalTemperature, setOptimalTemperature] = useState(25);
-  const [fanSpeed, setFanSpeed] = useState(0);
-  const [isAutoTemp, setIsAutoTemp] = useState(true);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'scheduled': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'active': return 'Aktivno';
-      case 'scheduled': return 'Zakazano';
-      default: return 'Neaktivno';
-    }
-  };
+  const {
+    temperature,
+    optimalTemperature,
+    fanSpeed,
+    isAutoTemp,
+    zones,
+    setTemperature,
+    setOptimalTemperature,
+    setFanSpeed,
+    setIsAutoTemp
+  } = useIrrigationStore();
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -127,8 +104,14 @@ const IrrigationControl = () => {
                 <Droplets className="h-5 w-5 text-blue-500" />
                 <div>
                   <h4 className="font-medium text-gray-900">{zone.name}</h4>
-                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(zone.status)}`}>
-                    {getStatusText(zone.status)}
+                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                    zone.status === 'active' ? 'bg-green-100 text-green-800' :
+                    zone.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}>
+                    {zone.status === 'active' ? 'Aktivno' :
+                     zone.status === 'scheduled' ? 'Zakazano' :
+                     'Neaktivno'}
                   </span>
                 </div>
               </div>
