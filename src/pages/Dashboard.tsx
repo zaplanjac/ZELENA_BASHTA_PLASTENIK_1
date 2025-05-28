@@ -24,8 +24,8 @@ const Dashboard = () => {
             unit="°C"
             trend="up"
             trendValue="+1.2°C"
-            icon={<Thermometer className="h-6 w-6 text-white" />}
-            color="bg-orange-100"
+            icon={<Thermometer className="h-6 w-6 text-orange-600" />}
+            color="bg-orange-500/20"
             optimal={true}
           />
           <SensorCard
@@ -34,8 +34,8 @@ const Dashboard = () => {
             unit="%"
             trend="down"
             trendValue="-5%"
-            icon={<Droplets className="h-6 w-6 text-white" />}
-            color="bg-blue-100"
+            icon={<Droplets className="h-6 w-6 text-blue-600" />}
+            color="bg-blue-500/20"
             optimal={true}
           />
           <SensorCard
@@ -44,8 +44,8 @@ const Dashboard = () => {
             unit="lux"
             trend="stable"
             trendValue="0"
-            icon={<Sun className="h-6 w-6 text-white" />}
-            color="bg-yellow-100"
+            icon={<Sun className="h-6 w-6 text-yellow-600" />}
+            color="bg-yellow-500/20"
             optimal={true}
           />
           <SensorCard
@@ -54,8 +54,8 @@ const Dashboard = () => {
             unit="pH"
             trend="up"
             trendValue="+0.2"
-            icon={<Activity className="h-6 w-6 text-white" />}
-            color="bg-green-100"
+            icon={<Activity className="h-6 w-6 text-green-600" />}
+            color="bg-green-500/20"
             optimal={false}
           />
         </div>
