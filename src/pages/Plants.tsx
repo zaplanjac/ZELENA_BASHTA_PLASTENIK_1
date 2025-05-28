@@ -208,8 +208,15 @@ const Plants = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="calendar">
-            <iframe src="/calendar" className="w-full h-[800px] border-none rounded-lg" />
+          <TabsContent value="calendar" className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <div className="calendar-container w-full h-[800px] bg-white">
+              <iframe 
+                src="https://calendar.google.com/calendar/embed?height=800&wkst=2&bgcolor=%23ffffff&ctz=Europe%2FBelgrade&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=1&showCalendars=0&src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%2333B679" 
+                className="w-full h-full border-none rounded-lg"
+                frameBorder="0" 
+                scrolling="no"
+              />
+            </div>
           </TabsContent>
 
           <TabsContent value="planner">
