@@ -1,12 +1,111 @@
 import React, { useState } from 'react';
 import PlantCard from '../components/PlantCard';
-import { Plus, Search, Filter, Grid, List, Calendar, Layout } from 'lucide-react';
+import { Plus, Search, Filter, Grid, List, Calendar, Layout, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GreenHousePlanner from '../components/GreenHousePlanner';
 
 const Plants = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+
+  const monthNames = [
+    'Januar', 'Februar', 'Mart', 'April', 'Maj', 'Jun',
+    'Jul', 'Avgust', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'
+  ];
+
+  const calendarData = {
+    'Januar': [
+      'Priprema leja i tunela',
+      'Setva u leje paprike, paradajza, krastavca i salate',
+      'Nega biljaka u leji',
+      'Kontrola povrća u trapu i u podrumu',
+      'Ispitivanje klijavosti semena'
+    ],
+    'Februar': [
+      'Setva u leje paradajza, paprike, kupusa i kelerabe za ranu njivsku proizvodnju',
+      'Nega rasada u leji: provetravanje, zalivanje, prihrana i zaštita',
+      'Pikiranje paradajza i paprike posejane u januaru',
+      'Priprema bašte za ranu stevu',
+      'Primena zemljišnih herbicida na površinama za uzgoj crnog luka i graška',
+      'Sadnja crnog i belog luka i setva spanaća, salate, rotkvice, graška, mrkve, peršuna i paštrnaka'
+    ],
+    'Mart': [
+      'Setva spanaća, salate, rotkvice, graška, mrkve, peršuna i paštrnaka',
+      'Sadnja krompira, salate, kupusa, kelja, kelerabe i rena',
+      'Izgradnja i priprema mlakih leja',
+      'Setva paprike, paradajza, plavog patliidžana, celera i kupusnjača za proizvodnju rasada'
+    ],
+    'April': [
+      'Uništavanje korova zemljišnim herbicidima',
+      'Suzbijanje korova u izniklom luku, grašku i dr.povrću',
+      'Nega rasada paradajza, paprike i plavog patlidžana u leji',
+      'Završavanje setve luka, graška i mrkve',
+      'Direktna setva paprike, paradajza, krastavca, tikvice, pasulja',
+      'Sadnja krompira, kupusa, karfiola i kelerabe',
+      'Berba salate, spanaća, rotkvica i mladog luka'
+    ],
+    'Maj': [
+      'Suzbijanje korova u izniklom povrću',
+      'Zaštita paradajza, krompira, krastavca i kupusa',
+      'Praćenje razvoja krompirove zlatice',
+      'Prihrana, zalivanje i okopavanje useva',
+      'Setva pasulja, krastavaca, lubenica, dinja',
+      'Sadnja paprike, paradajza, krastavca',
+      'Berba kelja, salate, spanaća, graška'
+    ],
+    'Jun': [
+      'Zaštita paradajza, krastavaca, luka i kupusa',
+      'Zaštita paprike od bakteriozne pegavosti',
+      'Zaštita lubenica od fuzarioznog uvenuća',
+      'Prihranjivanje biljaka',
+      'Berba kupusa, kelja, karfiola, kelerabe',
+      'Priprema zemljišta i setva rotkvice, salate'
+    ],
+    'Jul': [
+      'Zaštita paprike, paradajza, krastavaca',
+      'Zaštita pasulja i boranije od bakterija',
+      'Prihrana i zalivanje useva',
+      'Berba paradajza, paprike i krastavca',
+      'Setva postrne boranije, kornišona i rotkve',
+      'Sadnja kupusa, kelja, karfiola'
+    ],
+    'Avgust': [
+      'Nega useva na polju',
+      'Zaštita od bolesti i štetočina',
+      'Vađenje crnog luka',
+      'Berba paprike, paradajza, plavog patlidžana',
+      'Setva salate, spanaća, rotkve'
+    ],
+    'Septembar': [
+      'Zaštita od bolesti sa najkraćom karencom',
+      'Nega rasada salate i luka srebrnjaka',
+      'Zaštita od ranih mrazeva',
+      'Berba boranije, kornišona, paradajza',
+      'Setva rotkve, spanaća i salate'
+    ],
+    'Oktobar': [
+      'Sadnja salate, belog i crnog luka',
+      'Jesenja setva spanaća i graška',
+      'Dozrevanje paradajza',
+      'Vađenje korenastog povrća',
+      'Berba kupusa, karfiola, rena i rotkve'
+    ],
+    'Novembar': [
+      'Berba kasnog kupusa i kelja pupčara',
+      'Vađenje celera, praziluka, mrkve',
+      'Trapaljenje povrća',
+      'Uklanjanje biljnih ostataka',
+      'Kasna jesenja obrada zemljišta'
+    ],
+    'Decembar': [
+      'Obilazak useva na polju',
+      'Kontrola utrapljenog povrća',
+      'Priprema zemljišta za leje',
+      'Popravka alata',
+      'Setva salate, luka i paprike'
+    ]
+  };
 
   const plants = [
     {
@@ -75,6 +174,14 @@ const Plants = () => {
     plant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     plant.variety.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const nextMonth = () => {
+    setCurrentMonth((prev) => (prev === 11 ? 0 : prev + 1));
+  };
+
+  const prevMonth = () => {
+    setCurrentMonth((prev) => (prev === 0 ? 11 : prev - 1));
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -208,14 +315,33 @@ const Plants = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="calendar" className="bg-white rounded-xl shadow-sm border border-gray-200">
-            <div className="calendar-container w-full h-[800px] bg-white">
-              <iframe 
-                src="https://calendar.google.com/calendar/embed?height=800&wkst=2&bgcolor=%23ffffff&ctz=Europe%2FBelgrade&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=1&showCalendars=0&src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%2333B679" 
-                className="w-full h-full border-none rounded-lg"
-                frameBorder="0" 
-                scrolling="no"
-              />
+          <TabsContent value="calendar" className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <button
+                onClick={prevMonth}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <h2 className="text-2xl font-bold text-gray-900">{monthNames[currentMonth]}</h2>
+              <button
+                onClick={nextMonth}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-6">
+              {calendarData[monthNames[currentMonth]].map((task, index) => (
+                <div
+                  key={index}
+                  className="flex items-start space-x-4 p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-green-500"></div>
+                  <p className="text-gray-700">{task}</p>
+                </div>
+              ))}
             </div>
           </TabsContent>
 
