@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Droplets, Clock, Settings, Thermometer } from 'lucide-react';
 import IrrigationScheduleManager from './IrrigationScheduleManager';
 import { useIrrigationStore } from '@/lib/settings';
+import { Slider } from '@/components/ui/slider';
 
 const IrrigationControl = () => {
   const [showScheduleManager, setShowScheduleManager] = useState(false);
@@ -16,6 +17,14 @@ const IrrigationControl = () => {
     setFanSpeed,
     setIsAutoTemp
   } = useIrrigationStore();
+
+  const handleTemperatureChange = (value: number[]) => {
+    setOptimalTemperature(value[0]);
+  };
+
+  const handleFanSpeedChange = (value: number[]) => {
+    setFanSpeed(value[0]);
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -57,13 +66,13 @@ const IrrigationControl = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Optimalna temperatura (°C)
             </label>
-            <input
-              type="range"
-              min="15"
-              max="35"
-              value={optimalTemperature}
-              onChange={(e) => setOptimalTemperature(parseInt(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            <Slider
+              value={[optimalTemperature]}
+              onValueChange={handleTemperatureChange}
+              min={15}
+              max={35}
+              step={1}
+              className="w-full"
             />
             <div className="flex justify-between mt-1">
               <span className="text-xs text-gray-500">15°C</span>
@@ -77,13 +86,13 @@ const IrrigationControl = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Brzina ventilatora
               </label>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={fanSpeed}
-                onChange={(e) => setFanSpeed(parseInt(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              <Slider
+                value={[fanSpeed]}
+                onValueChange={handleFanSpeedChange}
+                min={0}
+                max={100}
+                step={1}
+                className="w-full"
               />
               <div className="flex justify-between mt-1">
                 <span className="text-xs text-gray-500">0%</span>
