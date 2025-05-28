@@ -70,28 +70,6 @@ const Dashboard = () => {
             <NotificationCenter />
           </div>
         </div>
-
-        {/* Sensors and Devices Section */}
-        <div className="mt-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="text-center p-3 bg-green-50 rounded-lg">
-              <div className="text-sm font-medium text-gray-900">Temperatura</div>
-              <div className="text-xs text-green-600">Online</div>
-            </div>
-            <div className="text-center p-3 bg-green-50 rounded-lg">
-              <div className="text-sm font-medium text-gray-900">Vlažnost</div>
-              <div className="text-xs text-green-600">Online</div>
-            </div>
-            <div className="text-center p-3 bg-green-50 rounded-lg">
-              <div className="text-sm font-medium text-gray-900">Svetlost</div>
-              <div className="text-xs text-green-600">Online</div>
-            </div>
-            <div className="text-center p-3 bg-red-50 rounded-lg">
-              <div className="text-sm font-medium text-gray-900">pH senzor</div>
-              <div className="text-xs text-red-600">Offline</div>
-            </div>
-          </div>
-        </div>
       </div>
       <BackToTop />
     </div>
