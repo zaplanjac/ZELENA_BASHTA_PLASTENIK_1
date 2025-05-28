@@ -3,7 +3,6 @@ import { Thermometer, Droplets, Sun, Activity } from 'lucide-react';
 import SensorCard from '../components/SensorCard';
 import IrrigationControl from '../components/IrrigationControl';
 import HardwareControl from '../components/HardwareControl';
-import AutomationRules from '../components/AutomationRules';
 import NotificationCenter from '../components/NotificationCenter';
 import BackToTop from '../components/BackToTop';
 
@@ -61,11 +60,10 @@ const Dashboard = () => {
           />
         </div>
 
-        {/* Combined Irrigation and Automation Controls */}
+        {/* Combined Controls */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <div className="space-y-8">
             <IrrigationControl />
-            <AutomationRules />
           </div>
           <div className="space-y-8">
             <HardwareControl />

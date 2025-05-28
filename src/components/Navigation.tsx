@@ -44,8 +44,8 @@ const Navigation = () => {
             <button className="p-2 rounded-full bg-green-50 text-green-600 hover:bg-green-100 transition-colors">
               <Bell className="h-5 w-5" />
             </button>
-            <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-medium">M</span>
+            <div className="px-3 py-1 bg-green-600 rounded-lg">
+              <span className="text-white text-sm font-medium">Đorić Nenad</span>
             </div>
           </div>
         </div>

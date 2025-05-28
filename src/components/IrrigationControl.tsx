@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Droplets, Play, Pause, Clock, Settings } from 'lucide-react';
+import { Droplets, Play, Pause, Clock, Settings, Thermometer } from 'lucide-react';
 import IrrigationScheduleManager from './IrrigationScheduleManager';
 
 interface Zone {
@@ -19,6 +19,10 @@ const IrrigationControl = () => {
   ]);
 
   const [showScheduleManager, setShowScheduleManager] = useState(false);
+  const [temperature, setTemperature] = useState(24);
+  const [optimalTemperature, setOptimalTemperature] = useState(25);
+  const [fanSpeed, setFanSpeed] = useState(0);
+  const [isAutoTemp, setIsAutoTemp] = useState(true);
 
   const toggleZone = (id: number) => {
     setZones(zones.map(zone => 
@@ -47,7 +51,7 @@ const IrrigationControl = () => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Kontrola navodnjavanja</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Kontrola navodnjavanja i temperature</h3>
         <button 
           onClick={() => setShowScheduleManager(true)} 
           className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -57,6 +61,72 @@ const IrrigationControl = () => {
         </button>
       </div>
       
+      {/* Temperature Control */}
+      <div className="mb-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <Thermometer className="h-5 w-5 text-red-500" />
+            <div>
+              <h4 className="font-medium text-gray-900">Trenutna temperatura: {temperature}°C</h4>
+              <p className="text-sm text-gray-600">Optimalna temperatura: {optimalTemperature}°C</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={() => setIsAutoTemp(!isAutoTemp)}
+              className={`px-3 py-1 rounded-lg text-sm ${
+                isAutoTemp ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+              }`}
+            >
+              {isAutoTemp ? 'Automatski' : 'Ručno'}
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Optimalna temperatura (°C)
+            </label>
+            <input
+              type="range"
+              min="15"
+              max="35"
+              value={optimalTemperature}
+              onChange={(e) => setOptimalTemperature(parseInt(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+            />
+            <div className="flex justify-between mt-1">
+              <span className="text-xs text-gray-500">15°C</span>
+              <span className="text-xs text-gray-500">{optimalTemperature}°C</span>
+              <span className="text-xs text-gray-500">35°C</span>
+            </div>
+          </div>
+
+          {!isAutoTemp && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Brzina ventilatora
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={fanSpeed}
+                onChange={(e) => setFanSpeed(parseInt(e.target.value))}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              />
+              <div className="flex justify-between mt-1">
+                <span className="text-xs text-gray-500">0%</span>
+                <span className="text-xs text-gray-500">{fanSpeed}%</span>
+                <span className="text-xs text-gray-500">100%</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Irrigation Zones */}
       <div className="space-y-4">
         {zones.map((zone) => (
           <div key={zone.id} className="border border-gray-200 rounded-lg p-4">
