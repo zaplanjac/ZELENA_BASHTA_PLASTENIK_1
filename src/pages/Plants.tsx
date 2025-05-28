@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Plus, Search, Filter, Grid, List, Calendar, Layout, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Grid, List, Calendar, Layout, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GreenHousePlanner from '../components/GreenHousePlanner';
 import { PlantIcon } from '@/components/PlantIcon';
 
 const Plants = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [searchTerm, setSearchTerm] = useState('');
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
 
   const monthNames = [
@@ -240,11 +239,6 @@ const Plants = () => {
     ]
   };
 
-  const filteredPlants = plants.filter(plant =>
-    plant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    plant.variety.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const nextMonth = () => {
     setCurrentMonth((prev) => (prev === 11 ? 0 : prev + 1));
   };
@@ -285,55 +279,36 @@ const Plants = () => {
           </TabsList>
 
           <TabsContent value="plants">
-            {/* Filters and Search */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
-                <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Pretražite biljke..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    />
-                  </div>
-                  <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                    <Filter className="h-4 w-4" />
-                    <span>Filteri</span>
-                  </button>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-lg transition-colors ${
-                      viewMode === 'grid'
-                        ? 'bg-green-100 text-green-600'
-                        : 'text-gray-400 hover:text-gray-600'
-                    }`}
-                  >
-                    <Grid className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-lg transition-colors ${
-                      viewMode === 'list'
-                        ? 'bg-green-100 text-green-600'
-                        : 'text-gray-400 hover:text-gray-600'
-                    }`}
-                  >
-                    <List className="h-4 w-4" />
-                  </button>
-                </div>
+            {/* View Mode Toggle */}
+            <div className="flex justify-end mb-6">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === 'grid'
+                      ? 'bg-green-100 text-green-600'
+                      : 'text-gray-400 hover:text-gray-600'
+                  }`}
+                >
+                  <Grid className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === 'list'
+                      ? 'bg-green-100 text-green-600'
+                      : 'text-gray-400 hover:text-gray-600'
+                  }`}
+                >
+                  <List className="h-4 w-4" />
+                </button>
               </div>
             </div>
 
             {/* Plants Grid/List */}
             {viewMode === 'grid' ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredPlants.map((plant, index) => (
+                {plants.map((plant, index) => (
                   <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                     <div className="flex items-center justify-center mb-4">
                       <PlantIcon name={plant.icon} className="w-16 h-16 text-green-600" />
@@ -345,7 +320,7 @@ const Plants = () => {
               </div>
             ) : (
               <div className="space-y-4">
-                {filteredPlants.map((plant, index) => (
+                {plants.map((plant, index) => (
                   <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center space-x-6">
                       <PlantIcon name={plant.icon} className="w-12 h-12 text-green-600" />
@@ -356,15 +331,6 @@ const Plants = () => {
                     </div>
                   </div>
                 ))}
-              </div>
-            )}
-
-            {filteredPlants.length === 0 && (
-              <div className="text-center py-12">
-                <div className="text-gray-400 mb-4">Nema pronađenih biljaka</div>
-                <button className="text-green-600 hover:text-green-700">
-                  Dodajte novu biljku
-                </button>
               </div>
             )}
           </TabsContent>
