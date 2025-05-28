@@ -1,4 +1,4 @@
-import { LucideIcon, Flower2, CircleOff } from 'lucide-react';
+import { DivideIcon as LucideIcon, Flower2, CircleOff } from 'lucide-react';
 import { 
   Carrot, Apple, Leaf, 
   CircleDot, Sprout, 
