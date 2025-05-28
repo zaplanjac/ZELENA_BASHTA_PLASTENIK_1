@@ -3,6 +3,7 @@ import { Plus, Grid, List, Calendar, Layout, ChevronLeft, ChevronRight } from 'l
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GreenHousePlanner from '../components/GreenHousePlanner';
 import { PlantIcon } from '@/components/PlantIcon';
+import BackToTop from '../components/BackToTop';
 
 const Plants = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -370,6 +371,7 @@ const Plants = () => {
           </TabsContent>
         </Tabs>
       </div>
+      <BackToTop />
     </div>
   );
 };

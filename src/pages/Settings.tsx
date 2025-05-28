@@ -1,6 +1,7 @@
 import React from 'react';
 import { Save } from 'lucide-react';
 import WiFiManager from '@/components/WiFiManager';
+import BackToTop from '../components/BackToTop';
 
 const Settings = () => {
   return (
@@ -25,6 +26,7 @@ const Settings = () => {
           </div>
         </div>
       </div>
+      <BackToTop />
     </div>
   );
 };
