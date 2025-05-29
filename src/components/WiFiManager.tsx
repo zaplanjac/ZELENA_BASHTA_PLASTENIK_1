@@ -54,7 +54,7 @@ const WiFiManager = () => {
   const [networks, setNetworks] = useState<WiFiNetwork[]>([]);
 
   const handleLogin = () => {
-    if (loginUsername === 'neschko' && loginPassword === 'flasicradule') {
+    if (loginUsername === 'zaplanjac' && loginPassword === 'po2li8o5peri') {
       setIsLoggedIn(true);
       toast({
         title: "Uspešna prijava",
@@ -230,6 +230,15 @@ const WiFiManager = () => {
             >
               Prijavi se
             </Button>
+
+            {/* Demo credentials */}
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-600 mb-2">Demo pristupni podaci:</p>
+              <div className="space-y-1">
+                <p className="text-sm"><span className="font-medium">Korisničko ime:</span> zaplanjac</p>
+                <p className="text-sm"><span className="font-medium">Lozinka:</span> po2li8o5peri</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
