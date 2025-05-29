@@ -49,6 +49,7 @@ const WiFiManager = () => {
   const [loginPassword, setLoginPassword] = useState('');
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [securityMode, setSecurityMode] = useState<'WPA' | 'WPA2' | 'WEP' | 'OPEN'>('WPA2');
+  const [connectionMode, setConnectionMode] = useState<'AP' | 'STA'>('AP');
   
   const [networks, setNetworks] = useState<WiFiNetwork[]>([
     { ssid: 'SmartGarden_Network', strength: 95, secured: true, connected: true, security: 'WPA2' },
@@ -94,11 +95,21 @@ const WiFiManager = () => {
     return '▁▁▁▁';
   };
 
+  useEffect(() => {
+    // Initial connection and mode check
+    const initConnection = async () => {
+      await esp32.connect();
+      setConnectionMode(esp32.getConnectionMode());
+    };
+    initConnection();
+  }, []);
+
   const handleScan = async () => {
     setIsScanning(true);
     try {
       const status = await esp32.getStatus();
       if (status) {
+        setConnectionMode(esp32.getConnectionMode());
         toast({
           title: "Skeniranje završeno",
           description: `Pronađeno je ${networks.length} WiFi mreža`,
@@ -107,7 +118,7 @@ const WiFiManager = () => {
     } catch (error) {
       toast({
         title: "Greška",
-        description: "Greška pri skeniranju mreža",
+        description: "Greška pri skeniranju mreža. Proverite konekciju sa ESP32.",
         variant: "destructive"
       });
     }
@@ -193,11 +204,6 @@ const WiFiManager = () => {
     }
   };
 
-  useEffect(() => {
-    // Inicijalno povezivanje sa ESP32
-    esp32.connect();
-  }, []);
-
   if (!isLoggedIn) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -260,7 +266,12 @@ const WiFiManager = () => {
           <div className="p-2 bg-blue-100 rounded-lg">
             <Wifi className="h-5 w-5 text-blue-600" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900">WiFi upravljanje</h2>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900">WiFi upravljanje</h2>
+            <p className="text-sm text-gray-600">
+              Mode: {connectionMode === 'AP' ? 'Access Point' : 'Station'}
+            </p>
+          </div>
         </div>
         <div className="flex items-center space-x-3">
           <Button 
