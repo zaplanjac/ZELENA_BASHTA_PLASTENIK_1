@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Plants from "./pages/Plants";
 import Hardware from "./pages/Hardware";
 import Settings from "./pages/Settings";
+import Instructions from "./pages/Instructions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="/plants" element={<Plants />} />
             <Route path="/hardware" element={<Hardware />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/instructions" element={<Instructions />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
