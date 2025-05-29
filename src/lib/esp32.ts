@@ -5,14 +5,23 @@ class ESP32Connection {
   private isConnected: boolean = false;
   private maxRetries: number = 3;
   private retryDelay: number = 2000; // 2 seconds
+  private connectionMode: 'AP' | 'STA' = 'AP';
 
   constructor(ipAddress: string = '192.168.4.1') {
+    // In AP mode, use default IP. In STA mode, use provided IP
     this.baseUrl = `http://${ipAddress}`;
   }
 
   async connect(): Promise<boolean> {
+    // Reset connection state before attempting to connect
+    this.isConnected = false;
+
     for (let attempt = 1; attempt <= this.maxRetries; attempt++) {
       try {
+        // First check if device is in AP mode
+        const isAP = await this.checkAPMode();
+        this.connectionMode = isAP ? 'AP' : 'STA';
+
         const response = await fetch(`${this.baseUrl}/api/status`, {
           timeout: 5000, // 5 second timeout
           headers: {
@@ -24,7 +33,7 @@ class ESP32Connection {
           this.isConnected = true;
           toast({
             title: "Uspešno povezivanje",
-            description: "Povezani ste sa ESP32 uređajem"
+            description: `Povezani ste sa ESP32 uređajem (${this.connectionMode} mod)`
           });
           return true;
         }
@@ -34,9 +43,16 @@ class ESP32Connection {
         console.error(`Connection attempt ${attempt} failed:`, error);
         
         if (attempt === this.maxRetries) {
+          let errorMessage = "Proverite da li je ESP32 uključen i u dometu WiFi mreže. ";
+          if (this.connectionMode === 'AP') {
+            errorMessage += "Uverite se da ste povezani na ESP32 Access Point mrežu.";
+          } else {
+            errorMessage += "Proverite da li su ESP32 i računar na istoj mreži.";
+          }
+          
           toast({
             title: "Greška pri povezivanju",
-            description: "Proverite da li je ESP32 uključen i u dometu WiFi mreže",
+            description: errorMessage,
             variant: "destructive"
           });
           return false;
@@ -57,7 +73,7 @@ class ESP32Connection {
         if (!reconnected) {
           toast({
             title: "Greška",
-            description: "Nije moguće uspostaviti vezu sa ESP32 uređajem",
+            description: "Nije moguće uspostaviti vezu sa ESP32 uređajem. Proverite mrežnu konekciju.",
             variant: "destructive"
           });
           return false;
@@ -88,9 +104,10 @@ class ESP32Connection {
       throw new Error(`Command failed with status: ${response.status}`);
     } catch (error) {
       console.error("Command failed:", error);
+      this.isConnected = false; // Reset connection state on error
       toast({
         title: "Greška",
-        description: "Greška pri slanju komande. Pokušajte ponovo.",
+        description: "Greška pri slanju komande. Proverite konekciju sa ESP32.",
         variant: "destructive"
       });
       return false;
@@ -98,6 +115,18 @@ class ESP32Connection {
   }
 
   async getStatus(): Promise<any> {
+    if (!this.isConnected) {
+      try {
+        const reconnected = await this.connect();
+        if (!reconnected) {
+          return null;
+        }
+      } catch (error) {
+        console.error("Reconnection failed:", error);
+        return null;
+      }
+    }
+
     try {
       const response = await fetch(`${this.baseUrl}/api/status`, {
         headers: {
@@ -112,9 +141,10 @@ class ESP32Connection {
       throw new Error(`Status check failed with status: ${response.status}`);
     } catch (error) {
       console.error("Status check failed:", error);
+      this.isConnected = false; // Reset connection state on error
       toast({
         title: "Greška",
-        description: "Nije moguće dohvatiti status uređaja. Proverite konekciju.",
+        description: "Nije moguće dohvatiti status uređaja. Proverite konekciju sa ESP32.",
         variant: "destructive"
       });
       return null;
@@ -124,13 +154,22 @@ class ESP32Connection {
   // Helper method to check if device is in AP mode
   private async checkAPMode(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/mode`);
+      const response = await fetch(`${this.baseUrl}/api/mode`, {
+        timeout: 3000
+      });
+      if (!response.ok) return true; // Default to AP mode if can't determine
       const data = await response.json();
       return data.mode === 'AP';
     } catch {
-      return false;
+      return true; // Default to AP mode if request fails
     }
+  }
+
+  // Public method to get current connection mode
+  getConnectionMode(): 'AP' | 'STA' {
+    return this.connectionMode;
   }
 }
 
+// Export a singleton instance with the default AP mode IP
 export const esp32 = new ESP32Connection();
