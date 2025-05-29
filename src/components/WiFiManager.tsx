@@ -38,7 +38,7 @@ const WiFiManager = () => {
   ]);
 
   const handleLogin = () => {
-    if (loginUsername === 'admin' && loginPassword === 'admin') {
+    if (loginUsername === 'neschko' && loginPassword === 'flasicradule') {
       setIsLoggedIn(true);
       toast({
         title: "Uspešna prijava",
