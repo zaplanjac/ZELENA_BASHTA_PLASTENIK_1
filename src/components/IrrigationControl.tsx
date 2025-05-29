@@ -1,29 +1,27 @@
 import React, { useState } from 'react';
-import { Droplets, Clock, Settings, Thermometer } from 'lucide-react';
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import IrrigationScheduleManager from './IrrigationScheduleManager';
 import { useIrrigationStore } from '@/lib/settings';
 import { Slider } from '@/components/ui/slider';
+import { Settings, Thermometer } from 'lucide-react';
 
 const IrrigationControl = () => {
   const [showScheduleManager, setShowScheduleManager] = useState(false);
   const {
     temperature,
     optimalTemperature,
-    fanSpeed,
     isAutoTemp,
+    isMotorRunning,
     zones,
     setTemperature,
     setOptimalTemperature,
-    setFanSpeed,
     setIsAutoTemp
   } = useIrrigationStore();
 
   const handleTemperatureChange = (value: number[]) => {
     setOptimalTemperature(value[0]);
-  };
-
-  const handleFanSpeedChange = (value: number[]) => {
-    setFanSpeed(value[0]);
   };
 
   return (
@@ -79,28 +77,14 @@ const IrrigationControl = () => {
               <span className="text-xs text-gray-500">{optimalTemperature}°C</span>
               <span className="text-xs text-gray-500">35°C</span>
             </div>
+            <p className="text-sm text-gray-600 mt-2">
+              {isAutoTemp && (
+                temperature > optimalTemperature
+                  ? `Ventilator je uključen jer je temperatura (${temperature}°C) iznad optimalne (${optimalTemperature}°C)`
+                  : `Ventilator je isključen jer je temperatura (${temperature}°C) u granicama optimalne (${optimalTemperature}°C)`
+              )}
+            </p>
           </div>
-
-          {!isAutoTemp && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Brzina ventilatora
-              </label>
-              <Slider
-                value={[fanSpeed]}
-                onValueChange={handleFanSpeedChange}
-                min={0}
-                max={100}
-                step={1}
-                className="w-full"
-              />
-              <div className="flex justify-between mt-1">
-                <span className="text-xs text-gray-500">0%</span>
-                <span className="text-xs text-gray-500">{fanSpeed}%</span>
-                <span className="text-xs text-gray-500">100%</span>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
@@ -110,19 +94,16 @@ const IrrigationControl = () => {
           <div key={zone.id} className="border border-gray-200 rounded-lg p-4">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-3">
-                <Droplets className="h-5 w-5 text-blue-500" />
-                <div>
-                  <h4 className="font-medium text-gray-900">{zone.name}</h4>
-                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                    zone.status === 'active' ? 'bg-green-100 text-green-800' :
-                    zone.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                    {zone.status === 'active' ? 'Aktivno' :
-                     zone.status === 'scheduled' ? 'Zakazano' :
-                     'Neaktivno'}
-                  </span>
-                </div>
+                <div className="text-sm font-medium text-gray-900">{zone.name}</div>
+                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                  zone.status === 'active' ? 'bg-green-100 text-green-800' :
+                  zone.status === 'scheduled' ? 'bg-blue-100 text-blue-800' :
+                  'bg-gray-100 text-gray-800'
+                }`}>
+                  {zone.status === 'active' ? 'Aktivno' :
+                   zone.status === 'scheduled' ? 'Zakazano' :
+                   'Neaktivno'}
+                </span>
               </div>
             </div>
             
@@ -142,18 +123,6 @@ const IrrigationControl = () => {
             </div>
           </div>
         ))}
-      </div>
-      
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <Clock className="h-5 w-5 text-gray-400" />
-            <span className="text-sm text-gray-600">Automatski režim: Uključen</span>
-          </div>
-          <div className="text-sm text-gray-600">
-            Sledeće automatsko zalivanje: 06:00
-          </div>
-        </div>
       </div>
 
       {/* Schedule Manager Modal */}

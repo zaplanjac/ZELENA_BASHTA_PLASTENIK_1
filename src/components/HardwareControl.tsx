@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 import { 
-  Power, 
-  Settings, 
-  RefreshCw, 
-  Clock, 
-  Thermometer, 
-  Droplets,
-  Sun,
-  Moon,
-  Play,
-  Pause,
-  Wifi,
-  WifiOff,
-  Lock,
-  Eye,
-  EyeOff,
-  AlertTriangle
+  Power, Settings, RefreshCw, Clock, Thermometer, Droplets,
+  Sun, Moon, Play, Pause, Wifi, WifiOff, Lock, Eye, EyeOff,
+  AlertTriangle, CheckCircle
 } from 'lucide-react';
+import { useIrrigationStore } from '@/lib/settings';
 
 const HardwareControl = () => {
+  const { 
+    isMotorRunning,
+    temperature,
+    optimalTemperature,
+    isAutoTemp,
+    setIsMotorRunning,
+    setIsAutoTemp
+  } = useIrrigationStore();
+
   const [devices, setDevices] = useState([
     {
       id: 'temp1',
@@ -31,21 +28,11 @@ const HardwareControl = () => {
       optimal: false
     },
     {
-      id: 'led1',
-      name: 'LED osvetljenje',
-      type: 'actuator',
-      status: 'online',
-      value: '75',
-      unit: '%',
-      icon: <Sun className="h-5 w-5" />,
-      controls: true
-    },
-    {
       id: 'fan1',
       name: 'Ventilator',
       type: 'actuator',
       status: 'online',
-      value: 'OFF',
+      value: isMotorRunning ? 'ON' : 'OFF',
       icon: <RefreshCw className="h-5 w-5" />,
       controls: true
     },
@@ -59,8 +46,6 @@ const HardwareControl = () => {
       controls: true
     }
   ]);
-
-  const [isAutoMode, setIsAutoMode] = useState(true);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -80,9 +65,12 @@ const HardwareControl = () => {
   };
 
   const toggleDevice = (deviceId: string) => {
-    if (!isAutoMode) { // Only allow manual control when in manual mode
+    if (!isAutoTemp || deviceId !== 'fan1') {
+      if (deviceId === 'fan1') {
+        setIsMotorRunning(!isMotorRunning);
+      }
       setDevices(devices.map(device => {
-        if (device.id === deviceId && device.controls) {
+        if (device.id === deviceId) {
           const newValue = device.value === 'ON' ? 'OFF' : 'ON';
           return { ...device, value: newValue };
         }
@@ -90,10 +78,6 @@ const HardwareControl = () => {
       }));
     }
   };
-
-  const hasNonOptimalValues = devices.some(device => 
-    device.type === 'sensor' && device.optimal === false
-  );
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -110,40 +94,33 @@ const HardwareControl = () => {
       </div>
 
       {/* Mode Selection Banner */}
-      <div className={`mb-6 p-4 rounded-lg border ${
-        hasNonOptimalValues ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200'
-      }`}>
+      <div className="mb-6 p-4 rounded-lg border bg-gray-50">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            {hasNonOptimalValues && (
-              <AlertTriangle className="h-5 w-5 text-red-500" />
-            )}
-            <div>
-              <h4 className="font-medium text-gray-900">Režim rada</h4>
-              <p className="text-sm text-gray-600">
-                {hasNonOptimalValues 
-                  ? 'Detektovane su neoptimalne vrednosti! Preporučuje se ručna kontrola.'
-                  : 'Izaberite način upravljanja uređajima'}
-              </p>
-            </div>
+          <div>
+            <h4 className="font-medium text-gray-900">Režim rada</h4>
+            <p className="text-sm text-gray-600">
+              {isAutoTemp 
+                ? 'Automatska kontrola na osnovu temperature'
+                : 'Ručna kontrola ventilatora'}
+            </p>
           </div>
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => setIsAutoMode(false)}
+              onClick={() => setIsAutoTemp(false)}
               className={`px-4 py-2 rounded-lg transition-colors ${
-                !isAutoMode 
+                !isAutoTemp 
                   ? 'bg-red-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-gray-100 text-gray-600'
               }`}
             >
               Ručno
             </button>
             <button
-              onClick={() => setIsAutoMode(true)}
+              onClick={() => setIsAutoTemp(true)}
               className={`px-4 py-2 rounded-lg transition-colors ${
-                isAutoMode 
+                isAutoTemp 
                   ? 'bg-green-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-gray-100 text-gray-600'
               }`}
             >
               Automatski
@@ -172,13 +149,13 @@ const HardwareControl = () => {
               {device.controls && (
                 <button
                   onClick={() => toggleDevice(device.id)}
-                  disabled={isAutoMode}
+                  disabled={isAutoTemp && device.id === 'fan1'}
                   className={`p-2 rounded-lg transition-colors ${
                     device.value === 'ON' 
                       ? 'bg-green-600 text-white hover:bg-green-700' 
                       : 'bg-gray-300 text-gray-600 hover:bg-gray-400'
-                  } ${isAutoMode ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  title={isAutoMode ? 'Prebacite na ručni režim za kontrolu' : ''}
+                  } ${isAutoTemp && device.id === 'fan1' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  title={isAutoTemp && device.id === 'fan1' ? 'Prebacite na ručni režim za kontrolu' : ''}
                 >
                   <Power className="h-4 w-4" />
                 </button>
@@ -188,6 +165,15 @@ const HardwareControl = () => {
             <div className="text-lg font-semibold">
               {device.value} {device.unit}
             </div>
+
+            {device.id === 'fan1' && isAutoTemp && (
+              <div className="mt-2 text-sm text-gray-600">
+                {temperature > optimalTemperature 
+                  ? `Ventilator je uključen jer je temperatura (${temperature}°C) iznad optimalne (${optimalTemperature}°C)`
+                  : `Ventilator je isključen jer je temperatura (${temperature}°C) u granicama optimalne (${optimalTemperature}°C)`
+                }
+              </div>
+            )}
           </div>
         ))}
       </div>

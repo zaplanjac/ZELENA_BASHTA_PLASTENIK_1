@@ -26,12 +26,14 @@ interface IrrigationSettings {
   optimalTemperature: number;
   fanSpeed: number;
   isAutoTemp: boolean;
+  isMotorRunning: boolean;
   setZones: (zones: Zone[]) => void;
   setSchedules: (schedules: Schedule[]) => void;
   setTemperature: (temp: number) => void;
   setOptimalTemperature: (temp: number) => void;
   setFanSpeed: (speed: number) => void;
   setIsAutoTemp: (isAuto: boolean) => void;
+  setIsMotorRunning: (isRunning: boolean) => void;
   updateZoneSchedule: (zoneId: string, nextRun: string) => void;
 }
 
@@ -65,6 +67,7 @@ export const useIrrigationStore = create<IrrigationSettings>()(
       optimalTemperature: 25,
       fanSpeed: 0,
       isAutoTemp: true,
+      isMotorRunning: false,
       setZones: (zones) => set({ zones }),
       setSchedules: (schedules) => {
         set({ schedules });
@@ -91,10 +94,26 @@ export const useIrrigationStore = create<IrrigationSettings>()(
           return { zones: updatedZones };
         });
       },
-      setTemperature: (temperature) => set({ temperature }),
-      setOptimalTemperature: (optimalTemperature) => set({ optimalTemperature }),
+      setTemperature: (temperature) => {
+        set((state) => {
+          const isMotorRunning = state.isAutoTemp ? temperature > state.optimalTemperature : state.isMotorRunning;
+          return { temperature, isMotorRunning };
+        });
+      },
+      setOptimalTemperature: (optimalTemperature) => {
+        set((state) => {
+          const isMotorRunning = state.isAutoTemp ? state.temperature > optimalTemperature : state.isMotorRunning;
+          return { optimalTemperature, isMotorRunning };
+        });
+      },
       setFanSpeed: (fanSpeed) => set({ fanSpeed }),
-      setIsAutoTemp: (isAutoTemp) => set({ isAutoTemp }),
+      setIsAutoTemp: (isAutoTemp) => {
+        set((state) => {
+          const isMotorRunning = isAutoTemp ? state.temperature > state.optimalTemperature : state.isMotorRunning;
+          return { isAutoTemp, isMotorRunning };
+        });
+      },
+      setIsMotorRunning: (isMotorRunning) => set({ isMotorRunning }),
       updateZoneSchedule: (zoneId, nextRun) => 
         set((state) => ({
           zones: state.zones.map(zone =>
