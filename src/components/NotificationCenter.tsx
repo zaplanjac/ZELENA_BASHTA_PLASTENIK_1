@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Bell, 
@@ -90,11 +89,7 @@ const NotificationCenter = () => {
   };
 
   const markAsRead = (notificationId: string) => {
-    setNotifications(notifications.map(notification =>
-      notification.id === notificationId
-        ? { ...notification, isRead: true }
-        : notification
-    ));
+    setNotifications(notifications.filter(notification => notification.id !== notificationId));
   };
 
   const deleteNotification = (notificationId: string) => {
@@ -207,7 +202,10 @@ const NotificationCenter = () => {
       <div className="mt-6 pt-6 border-t border-gray-200">
         <div className="flex items-center justify-between text-sm text-gray-600">
           <span>Ukupno: {notifications.length}</span>
-          <button className="text-green-600 hover:text-green-700 font-medium">
+          <button 
+            onClick={() => setNotifications([])}
+            className="text-green-600 hover:text-green-700 font-medium"
+          >
             Označi sve kao pročitane
           </button>
         </div>
