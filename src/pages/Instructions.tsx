@@ -205,7 +205,7 @@ const Instructions = () => {
 
 // Access Point credentials
 const char* ap_ssid = "ESP32-SoftAP";
-const char* ap_password = "password123";
+const char* ap_password = "po2li8o5peri";
 
 // Pin definitions
 const int MOSFET_PIN = 13;  // GPIO13 for motor control
@@ -420,7 +420,7 @@ void restoreStates() {
                   <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-green-100 text-green-600 font-medium">1</span>
                   <div>
                     <p className="font-medium">Povežite se na ESP32 mrežu</p>
-                    <p className="text-gray-600 mt-1">Na vašem uređaju pronađite WiFi mrežu "ESP32-SoftAP" i povežite se koristeći lozinku "password123"</p>
+                    <p className="text-gray-600 mt-1">Na vašem uređaju pronađite WiFi mrežu "ESP32-SoftAP" i povežite se koristeći lozinku "po2li8o5peri"</p>
                   </div>
                 </li>
 
