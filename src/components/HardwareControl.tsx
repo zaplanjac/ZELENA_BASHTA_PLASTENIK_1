@@ -51,7 +51,7 @@ const HardwareControl = () => {
     },
     {
       id: 'pump1',
-      name: 'Pumpa za vodu',
+      name: 'Elektroventil za vodu',
       type: 'actuator',
       status: 'warning',
       value: 'ON',
@@ -130,7 +130,7 @@ const HardwareControl = () => {
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setIsAutoMode(false)}
-              className={`px-6 py-2 rounded-lg transition-colors ${
+              className={`px-4 py-2 rounded-lg transition-colors ${
                 !isAutoMode 
                   ? 'bg-red-600 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -140,7 +140,7 @@ const HardwareControl = () => {
             </button>
             <button
               onClick={() => setIsAutoMode(true)}
-              className={`px-6 py-2 rounded-lg transition-colors ${
+              className={`px-4 py-2 rounded-lg transition-colors ${
                 isAutoMode 
                   ? 'bg-green-600 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
