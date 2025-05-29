@@ -32,6 +32,7 @@ interface IrrigationSettings {
   setOptimalTemperature: (temp: number) => void;
   setFanSpeed: (speed: number) => void;
   setIsAutoTemp: (isAuto: boolean) => void;
+  updateZoneSchedule: (zoneId: string, nextRun: string) => void;
 }
 
 export const useIrrigationStore = create<IrrigationSettings>()(
@@ -65,11 +66,43 @@ export const useIrrigationStore = create<IrrigationSettings>()(
       fanSpeed: 0,
       isAutoTemp: true,
       setZones: (zones) => set({ zones }),
-      setSchedules: (schedules) => set({ schedules }),
+      setSchedules: (schedules) => {
+        set({ schedules });
+        // Update zone schedules based on new schedules
+        set((state) => {
+          const updatedZones = state.zones.map(zone => {
+            const zoneSchedules = schedules.filter(s => 
+              s.active && s.zones.includes(zone.name)
+            ).sort((a, b) => a.time.localeCompare(b.time));
+            
+            if (zoneSchedules.length > 0) {
+              return {
+                ...zone,
+                status: 'scheduled',
+                nextRun: zoneSchedules[0].time
+              };
+            }
+            return {
+              ...zone,
+              status: 'inactive',
+              nextRun: '-'
+            };
+          });
+          return { zones: updatedZones };
+        });
+      },
       setTemperature: (temperature) => set({ temperature }),
       setOptimalTemperature: (optimalTemperature) => set({ optimalTemperature }),
       setFanSpeed: (fanSpeed) => set({ fanSpeed }),
-      setIsAutoTemp: (isAutoTemp) => set({ isAutoTemp })
+      setIsAutoTemp: (isAutoTemp) => set({ isAutoTemp }),
+      updateZoneSchedule: (zoneId, nextRun) => 
+        set((state) => ({
+          zones: state.zones.map(zone =>
+            zone.id === zoneId
+              ? { ...zone, nextRun }
+              : zone
+          )
+        }))
     }),
     {
       name: 'irrigation-settings'

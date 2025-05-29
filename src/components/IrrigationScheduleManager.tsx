@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ScheduleList from './ScheduleList';
+import { useIrrigationStore } from '@/lib/settings';
 
 interface ScheduleItem {
   id: string;
@@ -16,47 +17,9 @@ interface IrrigationScheduleManagerProps {
   onClose: () => void;
 }
 
-const STORAGE_KEY = 'irrigation_schedules';
-
 const IrrigationScheduleManager = ({ onClose }: IrrigationScheduleManagerProps) => {
-  const [schedules, setSchedules] = useState<ScheduleItem[]>(() => {
-    const savedSchedules = localStorage.getItem(STORAGE_KEY);
-    return savedSchedules ? JSON.parse(savedSchedules) : [
-      { 
-        id: '1', 
-        time: '06:00', 
-        zones: ['Vrt - Povrće'], 
-        duration: 15, 
-        active: true, 
-        days: ['Mon', 'Wed', 'Fri'] 
-      },
-      { 
-        id: '2', 
-        time: '12:00', 
-        zones: ['Plastenik'], 
-        duration: 5, 
-        active: true, 
-        days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'] 
-      },
-      { 
-        id: '3', 
-        time: '18:00', 
-        zones: ['Travnjak'], 
-        duration: 20, 
-        active: false, 
-        days: ['Sat', 'Sun'] 
-      },
-      { 
-        id: '4', 
-        time: '20:00', 
-        zones: ['Vrt - Povrće'], 
-        duration: 10, 
-        active: true, 
-        days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] 
-      }
-    ];
-  });
-
+  const { schedules: storedSchedules, setSchedules } = useIrrigationStore();
+  const [schedules, setLocalSchedules] = useState<ScheduleItem[]>(storedSchedules);
   const [editingSchedule, setEditingSchedule] = useState<ScheduleItem | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -70,10 +33,6 @@ const IrrigationScheduleManager = ({ onClose }: IrrigationScheduleManagerProps) 
     { key: 'Sat', label: 'Sub' },
     { key: 'Sun', label: 'Ned' }
   ];
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(schedules));
-  }, [schedules]);
 
   const createNewSchedule = () => {
     const newSchedule: ScheduleItem = {
@@ -89,23 +48,30 @@ const IrrigationScheduleManager = ({ onClose }: IrrigationScheduleManagerProps) 
   };
 
   const saveSchedule = (schedule: ScheduleItem) => {
+    let updatedSchedules: ScheduleItem[];
     if (isCreating) {
-      setSchedules([...schedules, schedule]);
-      setIsCreating(false);
+      updatedSchedules = [...schedules, schedule];
     } else {
-      setSchedules(schedules.map(s => s.id === schedule.id ? schedule : s));
+      updatedSchedules = schedules.map(s => s.id === schedule.id ? schedule : s);
     }
+    setLocalSchedules(updatedSchedules);
+    setSchedules(updatedSchedules); // Update global store
     setEditingSchedule(null);
+    setIsCreating(false);
   };
 
   const deleteSchedule = (id: string) => {
-    setSchedules(schedules.filter(s => s.id !== id));
+    const updatedSchedules = schedules.filter(s => s.id !== id);
+    setLocalSchedules(updatedSchedules);
+    setSchedules(updatedSchedules); // Update global store
   };
 
   const toggleScheduleActive = (id: string) => {
-    setSchedules(schedules.map(s => 
+    const updatedSchedules = schedules.map(s => 
       s.id === id ? { ...s, active: !s.active } : s
-    ));
+    );
+    setLocalSchedules(updatedSchedules);
+    setSchedules(updatedSchedules); // Update global store
   };
 
   const cancelEdit = () => {
