@@ -51,13 +51,7 @@ const WiFiManager = () => {
   const [securityMode, setSecurityMode] = useState<'WPA' | 'WPA2' | 'WEP' | 'OPEN'>('WPA2');
   const [connectionMode, setConnectionMode] = useState<'AP' | 'STA'>('AP');
   
-  const [networks, setNetworks] = useState<WiFiNetwork[]>([
-    { ssid: 'SmartGarden_Network', strength: 95, secured: true, connected: true, security: 'WPA2' },
-    { ssid: 'Home_WiFi_5G', strength: 78, secured: true, connected: false, security: 'WPA' },
-    { ssid: 'TP-Link_2024', strength: 65, secured: true, connected: false, security: 'WPA2' },
-    { ssid: 'GuestNetwork', strength: 45, secured: false, connected: false, security: 'OPEN' },
-    { ssid: 'ESP32_Network', strength: 90, secured: true, connected: false, security: 'WPA' }
-  ]);
+  const [networks, setNetworks] = useState<WiFiNetwork[]>([]);
 
   const handleLogin = () => {
     if (loginUsername === 'neschko' && loginPassword === 'flasicradule') {
@@ -95,30 +89,25 @@ const WiFiManager = () => {
     return '▁▁▁▁';
   };
 
-  useEffect(() => {
-    // Initial connection and mode check
-    const initConnection = async () => {
-      await esp32.connect();
-      setConnectionMode(esp32.getConnectionMode());
-    };
-    initConnection();
-  }, []);
-
   const handleScan = async () => {
     setIsScanning(true);
     try {
-      const status = await esp32.getStatus();
-      if (status) {
-        setConnectionMode(esp32.getConnectionMode());
+      // Simulate finding ESP32 network
+      setTimeout(() => {
+        setNetworks([
+          { ssid: 'ESP32_Network', strength: 90, secured: true, connected: false, security: 'WPA2' },
+          { ssid: 'AndroidAP', strength: 85, secured: true, connected: false, security: 'WPA2' },
+          { ssid: 'iPhone_Hotspot', strength: 75, secured: true, connected: false, security: 'WPA2' }
+        ]);
         toast({
           title: "Skeniranje završeno",
-          description: `Pronađeno je ${networks.length} WiFi mreža`,
+          description: "Pronađene su dostupne WiFi mreže",
         });
-      }
+      }, 2000);
     } catch (error) {
       toast({
         title: "Greška",
-        description: "Greška pri skeniranju mreža. Proverite konekciju sa ESP32.",
+        description: "Greška pri skeniranju mreža",
         variant: "destructive"
       });
     }
@@ -143,14 +132,8 @@ const WiFiManager = () => {
     setIsConnecting(true);
     
     try {
-      const success = await esp32.sendCommand('connect', {
-        ssid: network.ssid,
-        password: pwd,
-        username: user,
-        security: securityMode
-      });
-
-      if (success) {
+      // Simulate connection attempt
+      setTimeout(() => {
         const updatedNetworks = networks.map(n => ({
           ...n,
           connected: n.ssid === network.ssid
@@ -161,7 +144,7 @@ const WiFiManager = () => {
           title: "Uspešno povezano",
           description: `Povezani ste na mrežu ${network.ssid}`,
         });
-      }
+      }, 2000);
     } catch (error) {
       toast({
         title: "Greška",
@@ -178,23 +161,17 @@ const WiFiManager = () => {
 
   const handleDisconnect = async (network: WiFiNetwork) => {
     try {
-      const success = await esp32.sendCommand('disconnect', {
-        ssid: network.ssid
+      const updatedNetworks = networks.map(n => ({
+        ...n,
+        connected: false
+      }));
+      setNetworks(updatedNetworks);
+      
+      toast({
+        title: "Prekinuta veza",
+        description: `Prekinuta je veza sa mrežom ${network.ssid}`,
+        variant: "destructive"
       });
-
-      if (success) {
-        const updatedNetworks = networks.map(n => ({
-          ...n,
-          connected: false
-        }));
-        setNetworks(updatedNetworks);
-        
-        toast({
-          title: "Prekinuta veza",
-          description: `Prekinuta je veza sa mrežom ${network.ssid}`,
-          variant: "destructive"
-        });
-      }
     } catch (error) {
       toast({
         title: "Greška",
@@ -350,6 +327,13 @@ const WiFiManager = () => {
             </div>
           </div>
         ))}
+
+        {networks.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            <Wifi className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+            <p>Kliknite na "Skeniraj" da pronađete dostupne mreže</p>
+          </div>
+        )}
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
