@@ -1,10 +1,31 @@
-import React, { useState } from 'react';
-import { Wifi, WifiOff, Lock, Eye, EyeOff, RefreshCw, CheckCircle, User, Shield } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Plus, 
+  Edit, 
+  Trash2, 
+  Clock, 
+  Thermometer, 
+  Droplets,
+  Sun,
+  Moon,
+  Play,
+  Pause,
+  Wifi,
+  WifiOff,
+  Lock,
+  Eye,
+  EyeOff,
+  RefreshCw,
+  CheckCircle,
+  User,
+  Shield
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { esp32 } from '@/lib/esp32';
 
 interface WiFiNetwork {
   ssid: string;
@@ -75,13 +96,22 @@ const WiFiManager = () => {
 
   const handleScan = async () => {
     setIsScanning(true);
-    setTimeout(() => {
+    try {
+      const status = await esp32.getStatus();
+      if (status) {
+        toast({
+          title: "Skeniranje završeno",
+          description: `Pronađeno je ${networks.length} WiFi mreža`,
+        });
+      }
+    } catch (error) {
       toast({
-        title: "Skeniranje završeno",
-        description: `Pronađeno je ${networks.length} WiFi mreža`,
+        title: "Greška",
+        description: "Greška pri skeniranju mreža",
+        variant: "destructive"
       });
-      setIsScanning(false);
-    }, 2000);
+    }
+    setIsScanning(false);
   };
 
   const handleNetworkSelect = (network: WiFiNetwork) => {
@@ -101,38 +131,72 @@ const WiFiManager = () => {
   const handleConnect = async (network: WiFiNetwork, pwd: string, user: string) => {
     setIsConnecting(true);
     
-    setTimeout(() => {
-      const updatedNetworks = networks.map(n => ({
-        ...n,
-        connected: n.ssid === network.ssid
-      }));
-      setNetworks(updatedNetworks);
-      
-      toast({
-        title: "Uspešno povezano",
-        description: `Povezani ste na mrežu ${network.ssid}`,
+    try {
+      const success = await esp32.sendCommand('connect', {
+        ssid: network.ssid,
+        password: pwd,
+        username: user,
+        security: securityMode
       });
-      
-      setIsConnecting(false);
-      setIsDialogOpen(false);
-      setPassword('');
-      setUsername('');
-    }, 3000);
+
+      if (success) {
+        const updatedNetworks = networks.map(n => ({
+          ...n,
+          connected: n.ssid === network.ssid
+        }));
+        setNetworks(updatedNetworks);
+        
+        toast({
+          title: "Uspešno povezano",
+          description: `Povezani ste na mrežu ${network.ssid}`,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Greška",
+        description: "Greška pri povezivanju na mrežu",
+        variant: "destructive"
+      });
+    }
+    
+    setIsConnecting(false);
+    setIsDialogOpen(false);
+    setPassword('');
+    setUsername('');
   };
 
-  const handleDisconnect = (network: WiFiNetwork) => {
-    const updatedNetworks = networks.map(n => ({
-      ...n,
-      connected: false
-    }));
-    setNetworks(updatedNetworks);
-    
-    toast({
-      title: "Prekinuta veza",
-      description: `Prekinuta je veza sa mrežom ${network.ssid}`,
-      variant: "destructive"
-    });
+  const handleDisconnect = async (network: WiFiNetwork) => {
+    try {
+      const success = await esp32.sendCommand('disconnect', {
+        ssid: network.ssid
+      });
+
+      if (success) {
+        const updatedNetworks = networks.map(n => ({
+          ...n,
+          connected: false
+        }));
+        setNetworks(updatedNetworks);
+        
+        toast({
+          title: "Prekinuta veza",
+          description: `Prekinuta je veza sa mrežom ${network.ssid}`,
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Greška",
+        description: "Greška pri prekidanju veze",
+        variant: "destructive"
+      });
+    }
   };
+
+  useEffect(() => {
+    // Inicijalno povezivanje sa ESP32
+    esp32.connect();
+  }, []);
 
   if (!isLoggedIn) {
     return (
