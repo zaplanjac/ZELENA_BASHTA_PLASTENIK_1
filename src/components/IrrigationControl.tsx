@@ -15,13 +15,19 @@ const IrrigationControl = () => {
     isAutoTemp,
     isMotorRunning,
     zones,
+    motorSpeed,
     setTemperature,
     setOptimalTemperature,
-    setIsAutoTemp
+    setIsAutoTemp,
+    setMotorSpeed
   } = useIrrigationStore();
 
   const handleTemperatureChange = (value: number[]) => {
     setOptimalTemperature(value[0]);
+  };
+
+  const handleMotorSpeedChange = (value: number[]) => {
+    setMotorSpeed(value[0]);
   };
 
   return (
@@ -76,6 +82,25 @@ const IrrigationControl = () => {
               <span className="text-xs text-gray-500">15°C</span>
               <span className="text-xs text-gray-500">{optimalTemperature}°C</span>
               <span className="text-xs text-gray-500">35°C</span>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Brzina motora (PWM)
+            </label>
+            <Slider
+              value={[motorSpeed]}
+              onValueChange={handleMotorSpeedChange}
+              min={0}
+              max={255}
+              step={1}
+              className="w-full"
+            />
+            <div className="flex justify-between mt-1">
+              <span className="text-xs text-gray-500">0</span>
+              <span className="text-xs text-gray-500">{motorSpeed}</span>
+              <span className="text-xs text-gray-500">255</span>
             </div>
             <p className="text-sm text-gray-600 mt-2">
               {isAutoTemp && (

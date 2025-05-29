@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Sprout, Settings, Bell, Cpu, FileText } from 'lucide-react';
+import { Home, Sprout, Settings, Bell, FileText } from 'lucide-react';
 
 const Navigation = () => {
   const location = useLocation();
@@ -8,7 +8,6 @@ const Navigation = () => {
   const navItems = [
     { path: '/', icon: Home, label: 'Kontrolna tabla' },
     { path: '/plants', icon: Sprout, label: 'Biljke' },
-    { path: '/hardware', icon: Cpu, label: 'Hardver' },
     { path: '/settings', icon: Settings, label: 'WI-FI' },
     { path: '/instructions', icon: FileText, label: 'Uputstva' }
   ];

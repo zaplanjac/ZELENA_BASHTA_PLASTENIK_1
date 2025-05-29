@@ -24,6 +24,7 @@ interface IrrigationSettings {
   schedules: Schedule[];
   temperature: number;
   optimalTemperature: number;
+  motorSpeed: number;
   fanSpeed: number;
   isAutoTemp: boolean;
   isMotorRunning: boolean;
@@ -31,6 +32,7 @@ interface IrrigationSettings {
   setSchedules: (schedules: Schedule[]) => void;
   setTemperature: (temp: number) => void;
   setOptimalTemperature: (temp: number) => void;
+  setMotorSpeed: (speed: number) => void;
   setFanSpeed: (speed: number) => void;
   setIsAutoTemp: (isAuto: boolean) => void;
   setIsMotorRunning: (isRunning: boolean) => void;
@@ -65,6 +67,7 @@ export const useIrrigationStore = create<IrrigationSettings>()(
       ],
       temperature: 24,
       optimalTemperature: 25,
+      motorSpeed: 128,
       fanSpeed: 0,
       isAutoTemp: true,
       isMotorRunning: false,
@@ -106,6 +109,7 @@ export const useIrrigationStore = create<IrrigationSettings>()(
           return { optimalTemperature, isMotorRunning };
         });
       },
+      setMotorSpeed: (motorSpeed) => set({ motorSpeed }),
       setFanSpeed: (fanSpeed) => set({ fanSpeed }),
       setIsAutoTemp: (isAutoTemp) => {
         set((state) => {

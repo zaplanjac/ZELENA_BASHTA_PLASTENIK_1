@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Dashboard from "./pages/Dashboard";
 import Plants from "./pages/Plants";
-import Hardware from "./pages/Hardware";
 import Settings from "./pages/Settings";
 import Instructions from "./pages/Instructions";
 import NotFound from "./pages/NotFound";
@@ -24,7 +23,6 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/plants" element={<Plants />} />
-            <Route path="/hardware" element={<Hardware />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/instructions" element={<Instructions />} />
             <Route path="*" element={<NotFound />} />
