@@ -202,7 +202,7 @@ void handleStatus() {
                   <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-green-100 text-green-600 font-medium">1</span>
                   <div>
                     <p className="font-medium">Povežite se na ESP32 mrežu</p>
-                    <p className="text-gray-600 mt-1">Na vašem uređaju pronađite WiFi mrežu "ESP32-SoftAP" i povežite se koristeći lozinku "password123"</p>
+                    <p className="text-gray-600 mt-1">Na vašem uređaju pronađite WiFi mrežu "ESP32-SoftAP" i povežite se koristeći lozinku "po2li8o5peri"</p>
                   </div>
                 </li>
 
@@ -221,8 +221,8 @@ void handleStatus() {
                     <div className="mt-2 p-4 bg-gray-50 rounded-lg">
                       <p className="text-sm font-medium mb-2">Pristupni podaci:</p>
                       <div className="space-y-1 text-gray-600">
-                        <p>Korisničko ime: <code className="px-2 py-1 bg-gray-100 rounded">neschko</code></p>
-                        <p>Lozinka: <code className="px-2 py-1 bg-gray-100 rounded">flasicradule</code></p>
+                        <p>Korisničko ime: <code className="px-2 py-1 bg-gray-100 rounded">zaplanje</code></p>
+                        <p>Lozinka: <code className="px-2 py-1 bg-gray-100 rounded">po2li8o5peri</code></p>
                       </div>
                     </div>
                   </div>
