@@ -95,8 +95,8 @@ const HardwareControl = () => {
 
       {/* Mode Selection Banner */}
       <div className="mb-6 p-4 rounded-lg border bg-gray-50">
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-4 sm:mb-0">
             <h4 className="font-medium text-gray-900">Režim rada</h4>
             <p className="text-sm text-gray-600">
               {isAutoTemp 
@@ -104,7 +104,7 @@ const HardwareControl = () => {
                 : 'Ručna kontrola ventilatora'}
             </p>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
             <button
               onClick={() => setIsAutoTemp(false)}
               className={`px-4 py-2 rounded-lg transition-colors ${
