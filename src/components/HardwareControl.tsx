@@ -97,12 +97,7 @@ const HardwareControl = () => {
       <div className="mb-6 p-4 rounded-lg border bg-gray-50">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="mb-4 sm:mb-0">
-            <h4 className="font-medium text-gray-900">Režim rada</h4>
-            <p className="text-sm text-gray-600">
-              {isAutoTemp 
-                ? 'Automatska kontrola na osnovu temperature'
-                : 'Ručna kontrola ventilatora'}
-            </p>
+            <h4 className="font-medium text-gray-900">Režim rada ventilatora</h4>
           </div>
           <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
             <button
@@ -132,9 +127,9 @@ const HardwareControl = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {devices.map((device) => (
           <div key={device.id} className={`border rounded-lg p-4 ${getStatusColor(device.status)}`}>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="p-2 bg-white rounded-lg">
+                <div className="p-2 sm:p-3 rounded-lg bg-white">
                   {device.icon}
                 </div>
                 <div>
@@ -162,7 +157,7 @@ const HardwareControl = () => {
               )}
             </div>
             
-            <div className="text-lg font-semibold">
+            <div className="text-lg font-semibold mt-2">
               {device.value} {device.unit}
             </div>
 

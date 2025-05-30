@@ -34,13 +34,6 @@ const IrrigationControl = () => {
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-gray-900">Kontrola navodnjavanja i temperature - automatski režim</h3>
-        <button 
-          onClick={() => setShowScheduleManager(true)} 
-          className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-        >
-          <Settings className="h-4 w-4" />
-          <span>Podešavanja</span>
-        </button>
       </div>
       
       {/* Temperature Control */}
@@ -112,6 +105,15 @@ const IrrigationControl = () => {
           </div>
         </div>
       </div>
+
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Upravljanje rasporedom navodnjavanja</h3>
+      <button 
+        onClick={() => setShowScheduleManager(true)} 
+        className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors mb-6"
+      >
+        <Settings className="h-4 w-4" />
+        <span>Podešavanja</span>
+      </button>
 
       {/* Irrigation Zones */}
       <div className="space-y-4">
