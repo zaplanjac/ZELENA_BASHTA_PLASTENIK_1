@@ -107,23 +107,23 @@ const HardwareControl = () => {
           <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
             <button
               onClick={() => setIsAutoTemp(false)}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-4 py-2 rounded-lg border border-gray-900 transition-colors ${
                 !isAutoTemp 
-                  ? 'bg-red-600 text-white'
-                  : 'bg-gray-100 text-gray-600'
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-transparent text-gray-900'
               }`}
             >
-              Ručno
+              {!isAutoTemp ? 'ON - Ručno' : 'OFF - Ručno'}
             </button>
             <button
               onClick={() => setIsAutoTemp(true)}
-              className={`px-4 py-2 rounded-lg transition-colors ${
+              className={`px-4 py-2 rounded-lg border border-gray-900 transition-colors ${
                 isAutoTemp 
-                  ? 'bg-green-600 text-white'
-                  : 'bg-gray-100 text-gray-600'
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-transparent text-gray-900'
               }`}
             >
-              Automatski
+              {isAutoTemp ? 'ON - Automatski' : 'OFF - Automatski'}
             </button>
           </div>
         </div>
@@ -176,14 +176,6 @@ const HardwareControl = () => {
             )}
           </div>
         ))}
-      </div>
-
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <div className="flex items-center justify-between text-sm text-gray-600">
-          <span>Ukupno uređaja: {devices.length}</span>
-          <span>Online: {devices.filter(d => d.status === 'online').length}</span>
-          <span>Upozorenja: {devices.filter(d => d.status === 'warning').length}</span>
-        </div>
       </div>
     </div>
   );
