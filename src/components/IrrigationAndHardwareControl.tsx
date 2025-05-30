@@ -103,6 +103,37 @@ const IrrigationAndHardwareControl = () => {
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-gray-900">Kontrola navodnjavanja i temperature - automatski režim</h3>
         </div>
+
+        {/* Mode Selection Banner - Moved here */}
+        <div className="mb-6 p-4 rounded-lg border bg-gray-50">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-4 sm:mb-0">
+              <h4 className="font-medium text-gray-900">Režim rada ventilatora</h4>
+            </div>
+            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
+              <button
+                onClick={() => setIsAutoTemp(false)}
+                className={`px-4 py-2 rounded-lg border border-gray-900 transition-colors ${
+                  !isAutoTemp 
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-transparent text-gray-900'
+                }`}
+              >
+                {!isAutoTemp ? 'ON - Ručno' : 'OFF - Ručno'}
+              </button>
+              <button
+                onClick={() => setIsAutoTemp(true)}
+                className={`px-4 py-2 rounded-lg border border-gray-900 transition-colors ${
+                  isAutoTemp 
+                    ? 'bg-gray-900 text-white'
+                    : 'bg-transparent text-gray-900'
+                }`}
+              >
+                {isAutoTemp ? 'ON - Automatski' : 'OFF - Automatski'}
+              </button>
+            </div>
+          </div>
+        </div>
         
         {/* Temperature Control */}
         <div className="mb-8 p-4 border border-gray-200 rounded-lg bg-gray-50">
@@ -233,37 +264,6 @@ const IrrigationAndHardwareControl = () => {
             <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
               <Settings className="h-4 w-4" />
             </button>
-          </div>
-        </div>
-
-        {/* Mode Selection Banner */}
-        <div className="mb-6 p-4 rounded-lg border bg-gray-50">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <div className="mb-4 sm:mb-0">
-              <h4 className="font-medium text-gray-900">Režim rada ventilatora</h4>
-            </div>
-            <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
-              <button
-                onClick={() => setIsAutoTemp(false)}
-                className={`px-4 py-2 rounded-lg border border-gray-900 transition-colors ${
-                  !isAutoTemp 
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-transparent text-gray-900'
-                }`}
-              >
-                {!isAutoTemp ? 'ON - Ručno' : 'OFF - Ručno'}
-              </button>
-              <button
-                onClick={() => setIsAutoTemp(true)}
-                className={`px-4 py-2 rounded-lg border border-gray-900 transition-colors ${
-                  isAutoTemp 
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-transparent text-gray-900'
-                }`}
-              >
-                {isAutoTemp ? 'ON - Automatski' : 'OFF - Automatski'}
-              </button>
-            </div>
           </div>
         </div>
 
