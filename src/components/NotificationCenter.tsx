@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { 
-  Bell, 
   AlertTriangle, 
   CheckCircle, 
   Info, 
   X,
-  Settings,
-  Filter
+  Settings
 } from 'lucide-react';
 
 interface Notification {
@@ -56,8 +54,6 @@ const NotificationCenter = () => {
     }
   ]);
 
-  const [filter, setFilter] = useState<'all' | 'unread' | 'warning' | 'error'>('all');
-
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'warning': return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
@@ -84,47 +80,19 @@ const NotificationCenter = () => {
     setNotifications(notifications.filter(n => n.id !== notificationId));
   };
 
-  const filteredNotifications = notifications.filter(notification => {
-    switch (filter) {
-      case 'unread': return !notification.isRead;
-      case 'warning': return notification.type === 'warning';
-      case 'error': return notification.type === 'error';
-      default: return true;
-    }
-  });
-
-  const unreadCount = notifications.filter(n => !n.isRead).length;
-
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-3">
           <h3 className="text-lg font-semibold text-gray-900">Notifikacije</h3>
-          {unreadCount > 0 && (
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-              {unreadCount} novo
-            </span>
-          )}
         </div>
-        <div className="flex items-center space-x-2">
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value as any)}
-            className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          >
-            <option value="all">Sve</option>
-            <option value="unread">Nepročitane</option>
-            <option value="warning">Upozorenja</option>
-            <option value="error">Greške</option>
-          </select>
-          <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-            <Settings className="h-4 w-4" />
-          </button>
-        </div>
+        <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+          <Settings className="h-4 w-4" />
+        </button>
       </div>
 
       <div className="space-y-3">
-        {filteredNotifications.map((notification) => (
+        {notifications.map((notification) => (
           <div
             key={notification.id}
             className={`border-l-4 rounded-lg p-4 ${getNotificationColor(notification.type)} ${
@@ -168,9 +136,9 @@ const NotificationCenter = () => {
           </div>
         ))}
         
-        {filteredNotifications.length === 0 && (
+        {notifications.length === 0 && (
           <div className="text-center py-8 text-gray-500">
-            <Bell className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+            <AlertTriangle className="h-12 w-12 mx-auto mb-3 text-gray-300" />
             <p>Nema notifikacija za prikaz</p>
           </div>
         )}
