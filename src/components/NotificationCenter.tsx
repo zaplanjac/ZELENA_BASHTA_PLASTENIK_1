@@ -5,7 +5,6 @@ import {
   CheckCircle, 
   Info, 
   X,
-  Clock,
   Settings,
   Filter
 } from 'lucide-react';
@@ -15,9 +14,7 @@ interface Notification {
   type: 'warning' | 'success' | 'info' | 'error';
   title: string;
   message: string;
-  timestamp: string;
   isRead: boolean;
-  action?: string;
 }
 
 const NotificationCenter = () => {
@@ -27,25 +24,20 @@ const NotificationCenter = () => {
       type: 'warning',
       title: 'Niska vlažnost',
       message: 'Vlažnost zemljišta u zoni "Vrt - Povrće" je ispod 25%. Potrebno je zalivanje.',
-      timestamp: '10:30',
-      isRead: false,
-      action: 'Pokreni zalivanje'
+      isRead: false
     },
     {
       id: '2',
       type: 'error',
       title: 'pH senzor offline',
       message: 'pH senzor u staklenici nije dostupan već 2 sata.',
-      timestamp: '09:15',
-      isRead: false,
-      action: 'Proveri konekciju'
+      isRead: false
     },
     {
       id: '3',
       type: 'success',
       title: 'Zalivanje završeno',
       message: 'Automatsko zalivanje zone "Cvećnjak" je uspešno završeno.',
-      timestamp: '08:45',
       isRead: true
     },
     {
@@ -53,18 +45,14 @@ const NotificationCenter = () => {
       type: 'info',
       title: 'Vreme za berbu',
       message: 'Paradajz u staklenici je spreman za berbu nakon 75 dana.',
-      timestamp: '08:00',
-      isRead: false,
-      action: 'Označi kao obrano'
+      isRead: false
     },
     {
       id: '5',
       type: 'warning',
       title: 'Visoka temperatura',
       message: 'Temperatura u staklenici je 31°C. Preporučuje se uključivanje ventilatora.',
-      timestamp: '07:30',
-      isRead: true,
-      action: 'Uključi ventilator'
+      isRead: true
     }
   ]);
 
@@ -135,7 +123,7 @@ const NotificationCenter = () => {
         </div>
       </div>
 
-      <div className="space-y-3 max-h-96 overflow-y-auto">
+      <div className="space-y-3">
         {filteredNotifications.map((notification) => (
           <div
             key={notification.id}
@@ -155,18 +143,7 @@ const NotificationCenter = () => {
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                     )}
                   </div>
-                  <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-1 text-xs text-gray-500">
-                      <Clock className="h-3 w-3" />
-                      <span>{notification.timestamp}</span>
-                    </div>
-                    {notification.action && (
-                      <button className="text-xs bg-white border border-gray-300 px-2 py-1 rounded hover:bg-gray-50 transition-colors">
-                        {notification.action}
-                      </button>
-                    )}
-                  </div>
+                  <p className="text-sm text-gray-600">{notification.message}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-1">
