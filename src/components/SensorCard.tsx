@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
@@ -40,21 +39,21 @@ const SensorCard: React.FC<SensorCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between mb-4">
-        <div className={`p-3 rounded-lg ${color}`}>
+        <div className={`p-2 sm:p-3 rounded-lg ${color}`}>
           {icon}
         </div>
         <div className={`flex items-center space-x-1 ${getTrendColor()}`}>
           {getTrendIcon()}
-          <span className="text-sm font-medium">{trendValue}</span>
+          <span className="text-xs sm:text-sm font-medium">{trendValue}</span>
         </div>
       </div>
       
       <h3 className="text-gray-600 text-sm font-medium mb-1">{title}</h3>
       <div className="flex items-baseline space-x-1">
-        <span className="text-2xl font-bold text-gray-900">{value}</span>
-        <span className="text-gray-500 text-sm">{unit}</span>
+        <span className="text-xl sm:text-2xl font-bold text-gray-900">{value}</span>
+        <span className="text-gray-500 text-xs sm:text-sm">{unit}</span>
       </div>
       
       <div className="mt-3">

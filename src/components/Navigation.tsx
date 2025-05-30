@@ -19,13 +19,13 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <Sprout className="h-8 w-8 text-green-600" />
-              <span className="text-xl font-bold text-gray-900">Pametna Bašta</span>
+              <Sprout className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
+              <span className="text-lg sm:text-xl font-bold text-gray-900">Pametna Bašta</span>
             </Link>
           </div>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-4">
             {navItems.map((item) => (
               <Link
                 key={item.path}
@@ -43,11 +43,11 @@ const Navigation = () => {
           </div>
           
           {/* User Section */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <button className="p-2 rounded-full bg-green-50 text-green-600 hover:bg-green-100 transition-colors">
-              <Bell className="h-5 w-5" />
+              <Bell className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
-            <div className="px-3 py-1 bg-green-600 rounded-lg">
+            <div className="hidden sm:block px-3 py-1 bg-green-600 rounded-lg">
               <span className="text-white text-sm font-medium">Đorić Nenad</span>
             </div>
           </div>
@@ -70,7 +70,7 @@ const Navigation = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden">
+        <div className="md:hidden absolute w-full bg-white border-b border-gray-200 shadow-lg">
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
               <Link
@@ -87,6 +87,9 @@ const Navigation = () => {
                 <span>{item.label}</span>
               </Link>
             ))}
+            <div className="px-3 py-2 text-sm text-gray-600 border-t border-gray-100 mt-2 pt-2">
+              Prijavljeni kao: <span className="font-medium">Đorić Nenad</span>
+            </div>
           </div>
         </div>
       )}
