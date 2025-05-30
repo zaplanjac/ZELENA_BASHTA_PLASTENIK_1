@@ -18,11 +18,13 @@ const IrrigationAndHardwareControl = () => {
     isMotorRunning,
     zones,
     motorSpeed,
+    fanSpeed,
     setTemperature,
     setOptimalTemperature,
     setIsAutoTemp,
     setIsMotorRunning,
-    setMotorSpeed
+    setMotorSpeed,
+    setFanSpeed
   } = useIrrigationStore();
 
   const [devices, setDevices] = useState([
@@ -101,7 +103,7 @@ const IrrigationAndHardwareControl = () => {
       {/* Temperature and Motor Control */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Kontrola navodnjavanja i temperature - automatski režim</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Kontrola temperature plastenika</h3>
         </div>
 
         {/* Mode Selection Banner - Moved here */}
@@ -256,7 +258,7 @@ const IrrigationAndHardwareControl = () => {
       {/* Hardware Control */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-gray-900">Ručna hardverska kontrola</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Stanje vaše pametne bašte - Uređaji</h3>
           <div className="flex space-x-2">
             <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
               <RefreshCw className="h-4 w-4" />
